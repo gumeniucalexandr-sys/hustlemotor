@@ -10,7 +10,7 @@
 .logo{font-size:20px;font-weight:800;padding:8px 12px 28px}.nav button{width:100%;border:0;background:transparent;color:#cbd5e1;text-align:left;padding:12px;border-radius:9px;margin:3px 0;cursor:pointer;font-size:14px}.nav button.active,.nav button:hover{background:#253044;color:#fff}
 .main{margin-left:230px;width:calc(100% - 230px);padding:28px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}h1{margin:0;font-size:26px}.btn{border:0;border-radius:9px;padding:11px 16px;background:#1f4e78;color:white;cursor:pointer;font-weight:700}.btn.secondary{background:#e5e7eb;color:#111827}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.stat{background:white;border-radius:14px;padding:18px;box-shadow:0 1px 3px #00000012}.stat b{display:block;font-size:24px;margin-top:8px}.toolbar{display:flex;gap:10px;margin:16px 0}.input,select{padding:11px;border:1px solid #d5dae1;border-radius:9px;background:#fff}.toolbar .input{flex:1}
 .cars{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}.card{background:#fff;border-radius:15px;overflow:hidden;box-shadow:0 2px 8px #00000010;cursor:pointer}.photo{height:180px;background:#e5e7eb;display:flex;align-items:center;justify-content:center;color:#6b7280}.photo img{width:100%;height:100%;object-fit:cover}.cardbody{padding:15px}.price{font-size:20px;font-weight:800;margin:7px 0}.muted{color:#6b7280;font-size:13px}.badge{display:inline-block;padding:5px 8px;border-radius:99px;background:#dcfce7;color:#166534;font-size:12px;margin-top:8px}.badge.reserve{background:#fef3c7;color:#92400e}.badge.sold{background:#e5e7eb;color:#374151}
-.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}.modalbox{background:#fff;border-radius:16px;max-width:900px;width:100%;max-height:92vh;overflow:auto;padding:24px}.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.formgrid label{font-size:13px;color:#4b5563}.formgrid input,.formgrid select,.formgrid textarea{width:100%;margin-top:5px}.full{grid-column:1/-1}.photos{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.thumb{width:110px;height:82px;object-fit:cover;border-radius:8px;border:2px solid transparent;cursor:pointer;display:block}.photoItem{position:relative;display:inline-block;margin:3px;cursor:grab}.photoItem.dragging{opacity:.45}.photoDelete{position:absolute;right:5px;top:5px;border:0;background:#000b;color:#fff;width:25px;height:25px;border-radius:50%;cursor:pointer;font-size:16px;line-height:22px}.photoCover{position:absolute;left:5px;bottom:5px;background:#1f4e78;color:#fff;border-radius:6px;padding:3px 6px;font-size:10px}.photoHint{margin-top:7px;color:#6b7280;font-size:12px}.thumb.main{border-color:#1f4e78}
+.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}.modalbox{background:#fff;border-radius:16px;max-width:900px;width:100%;max-height:92vh;overflow:auto;padding:24px}.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.formgrid label{font-size:13px;color:#4b5563}.formgrid input,.formgrid select,.formgrid textarea{width:100%;margin-top:5px}.full{grid-column:1/-1}.photos{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.thumb{width:110px;height:82px;min-width:110px;min-height:82px;max-width:110px;max-height:82px;object-fit:cover;border-radius:8px;border:2px solid transparent;cursor:pointer;display:block;box-sizing:border-box}.photoItem>.thumb{position:absolute;inset:0;width:100%;height:100%;min-width:0;min-height:0;max-width:none;max-height:none;object-fit:cover;margin:0;z-index:1}.photoItem{position:relative;display:block;width:110px;height:82px;margin:3px;cursor:grab;flex:0 0 110px;overflow:hidden;border-radius:8px}.photoItem.dragging{opacity:.45}.photoDelete{position:absolute;right:5px;top:5px;border:0;background:#000b;color:#fff;width:25px;height:25px;border-radius:50%;cursor:pointer;font-size:16px;line-height:22px}.photoCover{position:absolute;left:5px;bottom:5px;background:#1f4e78;color:#fff;border-radius:6px;padding:3px 6px;font-size:10px;line-height:1;pointer-events:none;z-index:2}.photoHint{margin-top:7px;color:#6b7280;font-size:12px}.thumb.main{border-color:#1f4e78}.photoItem img.thumb{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;display:block!important;object-fit:cover!important;object-position:center!important}.photoItem.selected{border:2px solid #1f4e78}.photoItem.selected img.thumb{border-color:transparent}
 .lightbox{position:fixed;inset:0;background:#000d;display:none;align-items:center;justify-content:center;z-index:20;padding:30px}.lightbox.open{display:flex}.lightbox img{max-width:90vw;max-height:82vh;object-fit:contain;border-radius:10px}.lbbtn{position:absolute;border:0;background:#ffffff22;color:white;font-size:34px;width:48px;height:48px;border-radius:50%;cursor:pointer}.lbclose{right:24px;top:18px}.lbprev{left:24px;top:50%;transform:translateY(-50%)}.lbnext{right:24px;top:50%;transform:translateY(-50%)}.lbcount{position:absolute;bottom:20px;color:white;font-size:14px}
 .detail{display:grid;grid-template-columns:1.25fr 1fr;gap:22px}.hero{width:100%;height:330px;object-fit:cover;border-radius:14px;background:#eee}.info{background:#fff;border-radius:14px;padding:20px}.row{display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding:9px 0}.danger{color:#b91c1c}.ok{color:#166534}.empty{padding:50px;text-align:center;color:#6b7280;background:#fff;border-radius:14px}
 @media(max-width:800px){.side{width:70px}.logo{font-size:0}.logo:after{content:"A";font-size:22px}.nav button{font-size:0;text-align:center}.nav button:before{font-size:18px}.main{margin-left:70px;width:calc(100% - 70px);padding:16px}.grid{grid-template-columns:repeat(2,1fr)}.detail{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}}
@@ -92,10 +92,15 @@
 @media(max-width:700px){.clientModalGrid{grid-template-columns:1fr}.clientModalGrid .full{grid-column:auto}.heroGallery{min-height:240px}}
 
 </style>
+<style>
+.cloudStatus{font-size:12px;padding:7px 10px;border-radius:999px;background:#e5e7eb;color:#374151;white-space:nowrap}.cloudStatus.ok{background:#dcfce7;color:#166534}.cloudStatus.warn{background:#fef3c7;color:#92400e}.cloudStatus.err{background:#fee2e2;color:#991b1b}
+.cloudBar{display:flex;align-items:center;gap:8px}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <div class="app">
-<aside class="side"><div class="logo">HUSTLE MOTORS<div style="font-size:10px;font-weight:500;color:#94a3b8;margin-top:5px">☁ CLOUD CRM</div></div><div class="nav">
+<aside class="side"><div class="logo">HUSTLE MOTORS</div><div class="nav">
 <button data-page="dashboard">📊 Dashboard</button><button data-page="cars">🚗 Автомобили</button><button data-page="clients">👤 Клиенты</button><button data-page="deals">🤝 Сделки</button>
 </div></aside>
 <main class="main" id="app"></main>
@@ -110,173 +115,7 @@
   <div class="lbcount" id="lbcount"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-
-const SUPABASE_URL = 'https://jpzoghmpfdhyzisjtpza.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_FP-wtxNOIFPOKj7d4Rk8fA_4BkeP_UM';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-let cloudReady=false;
-let cloudBusy=false;
-
-function normalizeCar(row, photosRows=[]){
-  const pics=photosRows.filter(x=>String(x.car_id)===String(row.id)).sort((a,b)=>a.sort_order-b.sort_order)
-    .map(x=>x.public_url||'').filter(Boolean);
-  return {
-    id:row.id, brand:row.brand||'', model:row.model||'', year:row.year||0, mileage:row.mileage||0,
-    vin:row.vin||'', status:row.status||'В продаже', purchaseDate:row.purchase_date||'', ready:row.ready_date||'',
-    purchase:+row.purchase_price||0, sale:+row.sale_price||0, note:row.note||'', photos:pics,
-    listings:[], history:[]
-  };
-}
-
-async function loadCloud(){
-  const [carsR,photosR,expR,clientsR,linksR,listingsR,historyR,dealsR]=await Promise.all([
-    supabase.from('cars').select('*').order('created_at',{ascending:false}),
-    supabase.from('car_photos').select('*').order('sort_order'),
-    supabase.from('car_expenses').select('*').order('expense_date',{ascending:false}),
-    supabase.from('clients').select('*').order('created_at',{ascending:false}),
-    supabase.from('client_cars').select('*'),
-    supabase.from('car_listings').select('*').order('created_at',{ascending:false}),
-    supabase.from('car_history').select('*').order('event_date',{ascending:true}),
-    supabase.from('deals').select('*').order('created_at',{ascending:false})
-  ]);
-  for(const r of [carsR,photosR,expR,clientsR,linksR,listingsR,historyR,dealsR]){
-    if(r.error) throw r.error;
-  }
-  const publicUrl=(path)=>{
-    if(!path)return '';
-    return supabase.storage.from('car-photos').getPublicUrl(path).data.publicUrl;
-  };
-  const photoRows=photosR.data.map(x=>({...x,public_url:publicUrl(x.storage_path)}));
-  db.cars=carsR.data.map(c=>{
-    const x=normalizeCar(c,photoRows);
-    x.listings=listingsR.data.filter(l=>String(l.car_id)===String(c.id)).map(l=>({id:l.id,site:l.platform,price:+l.price||0,url:l.url||'',publishedAt:l.published_at||''}));
-    x.history=historyR.data.filter(h=>String(h.car_id)===String(c.id)).map(h=>({id:h.id,date:(h.event_date||'').slice(0,10),text:h.description,type:h.event_type}));
-    return x;
-  });
-  db.expenses=expR.data.map(e=>({id:e.id,carId:e.car_id,date:e.expense_date,category:e.category,amount:+e.amount||0,note:e.note||''}));
-  db.clients=clientsR.data.map(c=>({
-    id:c.id,name:c.name,phone:c.phone||'',email:c.email||'',budget:+c.budget||0,status:c.status||'Новый',note:c.note||'',
-    carIds:linksR.data.filter(x=>String(x.client_id)===String(c.id)).map(x=>x.car_id)
-  }));
-  db.deals=dealsR.data.map(d=>({id:d.id,carId:d.car_id,clientId:d.client_id,price:+d.sale_price||0,saleDate:d.sale_date,status:d.status,note:d.note||''}));
-  cloudReady=true;
-  const s=document.getElementById('cloudStatus');if(s){s.textContent='☁ Supabase подключён';s.style.background='#166534';}
-  return true;
-}
-
-async function uploadDataUrl(dataUrl, path){
-  const res=await fetch(dataUrl);
-  const blob=await res.blob();
-  const {error}=await supabase.storage.from('car-photos').upload(path,blob,{contentType:'image/jpeg',upsert:false});
-  if(error) throw error;
-  return path;
-}
-
-async function replaceCarPhotos(carId, dataUrls){
-  const {data:old,error:oldErr}=await supabase.from('car_photos').select('id,storage_path').eq('car_id',carId);
-  if(oldErr) throw oldErr;
-  if(old?.length){
-    await supabase.storage.from('car-photos').remove(old.map(x=>x.storage_path));
-    const {error}=await supabase.from('car_photos').delete().eq('car_id',carId);
-    if(error) throw error;
-  }
-  const urls=[];
-  for(let i=0;i<dataUrls.length;i++){
-    const src=dataUrls[i];
-    if(!src) continue;
-    let path;
-    if(src.startsWith('http')) {
-      const m=src.match(/car-photos\/([^?]+)(?:\?.*)?$/);
-      path=m?decodeURIComponent(m[1]):null;
-    } else {
-      path=carId+'/'+Date.now()+'_'+i+'.jpg';
-      await uploadDataUrl(src,path);
-    }
-    if(path){
-      const {error}=await supabase.from('car_photos').insert({car_id:carId,storage_path:path,sort_order:i,is_cover:i===0});
-      if(error) throw error;
-      urls.push(supabase.storage.from('car-photos').getPublicUrl(path).data.publicUrl);
-    }
-  }
-  return urls;
-}
-
-async function saveCarCloud(c){
-  let carId=c.id;
-  const payload={
-    brand:c.brand,model:c.model,year:c.year||null,mileage:c.mileage||null,vin:c.vin||null,status:c.status||'В продаже',
-    purchase_date:c.purchaseDate||null,ready_date:c.ready||null,purchase_price:c.purchase||0,sale_price:c.sale||0,note:c.note||null
-  };
-  if(carId){
-    const {error}=await supabase.from('cars').update(payload).eq('id',carId);
-    if(error) throw error;
-  }else{
-    const {data,error}=await supabase.from('cars').insert(payload).select().single();
-    if(error) throw error;
-    carId=data.id;
-  }
-  await replaceCarPhotos(carId,c.photos||[]);
-  const {error:delL}=await supabase.from('car_listings').delete().eq('car_id',carId);
-  if(delL) throw delL;
-  if(c.listings?.length){
-    const rows=c.listings.map(l=>({car_id:carId,platform:l.site||'Площадка',price:l.price||null,url:l.url||null,published_at:l.publishedAt||null}));
-    const {error}=await supabase.from('car_listings').insert(rows);
-    if(error) throw error;
-  }
-  if(!c.id){
-    const {error}=await supabase.from('car_history').insert({car_id:carId,event_type:'created',description:'Автомобиль добавлен'});
-    if(error) throw error;
-  }
-  return carId;
-}
-
-async function saveClientCloud(c){
-  let id=c.id;
-  const payload={name:c.name,phone:c.phone||null,email:c.email||null,budget:c.budget||null,status:c.status||'Новый',note:c.note||null};
-  if(id){
-    const {error}=await supabase.from('clients').update(payload).eq('id',id);
-    if(error) throw error;
-  }else{
-    const {data,error}=await supabase.from('clients').insert(payload).select().single();
-    if(error) throw error;
-    id=data.id;
-  }
-  const {error:del}=await supabase.from('client_cars').delete().eq('client_id',id);
-  if(del) throw del;
-  if(c.carIds?.length){
-    const {error}=await supabase.from('client_cars').insert(c.carIds.map(car_id=>({client_id:id,car_id})));
-    if(error) throw error;
-  }
-  return id;
-}
-
-async function saveExpenseCloud(e){
-  const {data,error}=await supabase.from('car_expenses').insert({
-    car_id:e.carId,expense_date:e.date||null,category:e.category,amount:e.amount||0,note:e.note||null
-  }).select().single();
-  if(error) throw error;
-  return data;
-}
-
-async function refreshCloud(){
-  await loadCloud();
-  page('cars');
-}
-
-async function initCloud(){
-  try{
-    await loadCloud();
-    page('dashboard');
-  }catch(err){
-    console.error('Supabase init error:',err);
-    cloudReady=false;
-    const s=document.getElementById('cloudStatus');if(s){s.textContent='⚠ Нет соединения';s.style.background='#b91c1c';}
-    alert('Не удалось подключиться к Supabase: '+(err.message||err));
-    page('dashboard');
-  }
-}
 const KEY='abuv_auto_crm_v1';
 let db;
 try{
@@ -294,6 +133,101 @@ db.cars.forEach(c=>{
   if(!Array.isArray(c.history))c.history=[];
 });
 let photos=[]; let editId=null;
+
+// HUSTLE MOTORS v7 — Supabase is an optional cloud layer. Local CRM remains usable if cloud is unavailable.
+const SUPABASE_URL='https://jpzoghmpfdhyzisjtpza.supabase.co';
+const SUPABASE_KEY='sb_publishable_FP-wtxNOIFPOKj7d4Rk8fA_4BkeP_UM';
+let supa=null, cloudReady=false, cloudBusy=false;
+const cloudStatusEl=()=>document.getElementById('cloudStatus');
+function setCloudStatus(text,kind=''){const el=cloudStatusEl();if(!el)return;el.textContent=text;el.className='cloudStatus '+kind;}
+function cloudInit(){
+  try{
+    if(!window.supabase?.createClient) throw new Error('Supabase SDK не загрузился');
+    supa=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
+    cloudReady=true; setCloudStatus('☁️ Облако подключено','ok');
+    return true;
+  }catch(e){console.error(e);cloudReady=false;setCloudStatus('☁️ Локальный режим','warn');return false;}
+}
+function cloudErr(prefix,e){console.error(prefix,e);setCloudStatus('☁️ Ошибка облака','err');}
+function localId(){return Date.now()+Math.floor(Math.random()*1000)}
+async function cloudLoad(){
+ if(!cloudReady||!supa)return false;
+ try{
+  const [cr,er,cl,li,hi,cp]=await Promise.all([
+   supa.from('cars').select('*').order('created_at',{ascending:true}),
+   supa.from('car_expenses').select('*').order('created_at',{ascending:true}),
+   supa.from('clients').select('*').order('created_at',{ascending:true}),
+   supa.from('car_listings').select('*').order('created_at',{ascending:true}),
+   supa.from('car_history').select('*').order('event_date',{ascending:true}),
+   supa.from('car_photos').select('*').order('sort_order',{ascending:true})
+  ]);
+  const bad=[cr,er,cl,li,hi,cp].find(x=>x.error); if(bad) throw bad.error;
+  const carMap=new Map();
+  db.cars=[]; db.expenses=[]; db.clients=[]; db.deals=[];
+  (cr.data||[]).forEach(r=>{const id=localId();carMap.set(r.id,id);db.cars.push({id,cloudId:r.id,brand:r.brand,model:r.model,year:r.year||0,mileage:r.mileage||0,vin:r.vin||'',status:r.status,purchaseDate:r.purchase_date||'',ready:r.ready_date||'',purchase:+r.purchase_price||0,sale:+r.sale_price||0,note:r.note||'',photos:[],listings:[],history:[]});});
+  (cp.data||[]).forEach(r=>{const c=db.cars.find(x=>x.cloudId===r.car_id);if(c){const path=r.storage_path||'';c.photos.push(path.startsWith('http')?path:`${SUPABASE_URL}/storage/v1/object/public/car-photos/${path}`);}});
+  (er.data||[]).forEach(r=>{const c=db.cars.find(x=>x.cloudId===r.car_id);if(c)db.expenses.push({id:localId(),cloudId:r.id,carId:c.id,date:r.expense_date||'',category:r.category,amount:+r.amount||0,note:r.note||''});});
+  (li.data||[]).forEach(r=>{const c=db.cars.find(x=>x.cloudId===r.car_id);if(c)c.listings.push({cloudId:r.id,site:r.platform,price:+r.price||0,url:r.url||''});});
+  (hi.data||[]).forEach(r=>{const c=db.cars.find(x=>x.cloudId===r.car_id);if(c)c.history.push({date:(r.event_date||'').slice(0,10),text:r.description||r.event_type||''});});
+  (cl.data||[]).forEach(r=>db.clients.push({id:localId(),cloudId:r.id,name:r.name,phone:r.phone||'',budget:+r.budget||0,status:r.status||'Новый',note:r.note||'',carIds:[]}));
+  // client_cars is loaded separately because it depends on the generated local ids above.
+  const cc=await supa.from('client_cars').select('*'); if(cc.error)throw cc.error;
+  (cc.data||[]).forEach(r=>{const cl=db.clients.find(x=>x.cloudId===r.client_id),c=db.cars.find(x=>x.cloudId===r.car_id);if(cl&&c)cl.carIds.push(c.id);});
+  try{localStorage.setItem(KEY,JSON.stringify(db));}catch(e){}
+  setCloudStatus(`☁️ Облако · ${db.cars.length} авто`,'ok'); page('dashboard'); return true;
+ }catch(e){cloudErr('cloudLoad',e);return false;}
+}
+async function uploadPhotoData(carCloudId,dataUrl,index){
+ const blob=await (await fetch(dataUrl)).blob();
+ const path=`${carCloudId}/${Date.now()}_${index}.jpg`;
+ const up=await supa.storage.from('car-photos').upload(path,blob,{contentType:'image/jpeg',upsert:true});
+ if(up.error)throw up.error; return path;
+}
+async function cloudUpsertCar(c){
+ if(!cloudReady)return;
+ const payload={brand:c.brand,model:c.model,year:c.year||null,mileage:c.mileage||null,vin:c.vin||null,status:c.status,purchase_date:c.purchaseDate||null,ready_date:c.ready||null,purchase_price:c.purchase||0,sale_price:c.sale||0,note:c.note||null};
+ let row;
+ if(c.cloudId){const r=await supa.from('cars').update(payload).eq('id',c.cloudId).select().single();if(r.error)throw r.error;row=r.data;}
+ else {const r=await supa.from('cars').insert(payload).select().single();if(r.error)throw r.error;row=r.data;c.cloudId=row.id;}
+ // Replace listings. This is intentionally simple and reliable for this MVP.
+ await supa.from('car_listings').delete().eq('car_id',c.cloudId);
+ if(c.listings?.length){const r=await supa.from('car_listings').insert(c.listings.map(x=>({car_id:c.cloudId,platform:x.site,price:x.price||null,url:x.url||null})));if(r.error)throw r.error;}
+ // Photos: upload current data URLs and rebuild photo rows. Existing public URLs are retained.
+ await supa.from('car_photos').delete().eq('car_id',c.cloudId);
+ const photoRows=[];
+ for(let i=0;i<(c.photos||[]).length;i++){
+   let path=c.photos[i];
+   if(path.startsWith('data:')) path=await uploadPhotoData(c.cloudId,c.photos[i],i);
+   else { const m=path.match(/car-photos\/([^?]+)(?:\?.*)?$/); if(m)path=m[1]; }
+   photoRows.push({car_id:c.cloudId,storage_path:path,sort_order:i,is_cover:i===0});
+ }
+ if(photoRows.length){const r=await supa.from('car_photos').insert(photoRows);if(r.error)throw r.error;}
+ // Append current history to cloud when not already represented is intentionally omitted here; status/price changes are saved locally and can be pushed by sync later.
+ return row;
+}
+async function cloudUpsertClient(cl){
+ if(!cloudReady)return;
+ const payload={name:cl.name,phone:cl.phone||null,email:cl.email||null,budget:cl.budget||null,status:cl.status||'Новый',note:cl.note||null};
+ let row;
+ if(cl.cloudId){const r=await supa.from('clients').update(payload).eq('id',cl.cloudId).select().single();if(r.error)throw r.error;row=r.data;}
+ else {const r=await supa.from('clients').insert(payload).select().single();if(r.error)throw r.error;row=r.data;cl.cloudId=row.id;}
+ await supa.from('client_cars').delete().eq('client_id',cl.cloudId);
+ const links=(cl.carIds||[]).map(id=>db.cars.find(c=>c.id==id)).filter(Boolean).map(c=>({client_id:cl.cloudId,car_id:c.cloudId})).filter(x=>x.car_id);
+ if(links.length){const r=await supa.from('client_cars').insert(links);if(r.error)throw r.error;}
+}
+async function cloudSync(){
+ if(cloudBusy||!cloudReady)return;
+ cloudBusy=true;setCloudStatus('☁️ Синхронизация…','warn');
+ try{
+  for(const c of db.cars)await cloudUpsertCar(c);
+  for(const e of db.expenses){const c=db.cars.find(x=>x.id==e.carId);if(!c?.cloudId)continue;const payload={car_id:c.cloudId,category:e.category,amount:e.amount||0,expense_date:e.date||null,note:e.note||null}; if(e.cloudId){const r=await supa.from('car_expenses').update(payload).eq('id',e.cloudId);if(r.error)throw r.error;}else{const r=await supa.from('car_expenses').insert(payload).select().single();if(r.error)throw r.error;e.cloudId=r.data.id;}}
+  for(const cl of db.clients)await cloudUpsertClient(cl);
+  try{localStorage.setItem(KEY,JSON.stringify(db));}catch(e){}
+  setCloudStatus(`☁️ Синхронизировано · ${db.cars.length} авто`,'ok');
+ }catch(e){cloudErr('cloudSync',e);alert('Облако не синхронизировалось. CRM продолжит работать локально.\n\n'+(e.message||e));}
+ finally{cloudBusy=false;}
+}
+
 const save=()=>{
   try{
     localStorage.setItem(KEY,JSON.stringify(db));
@@ -316,7 +250,7 @@ function dashboard(){
  const profit=sold.reduce((s,c)=>s+(+c.sale||0)-cost(c),0);
  const avgDays=active.length?Math.round(active.reduce((s,c)=>s+days(c),0)/active.length):0;
  const attention=active.filter(c=>days(c)>60).sort((a,b)=>days(b)-days(a)).slice(0,8);
- app.innerHTML=`<div class="top"><h1>Dashboard</h1><button class="btn" onclick="openCar()">+ Добавить авто</button></div>
+ app.innerHTML=`<div class="top"><h1>Dashboard</h1><div class="cloudBar"><span id="cloudStatus" class="cloudStatus">☁️ Подключение…</span><button class="btn secondary" onclick="cloudSync()">↻ Синхронизировать</button><button class="btn" onclick="openCar()">+ Добавить авто</button></div></div>
  <div class="statGrid">
   <div class="kpi"><div class="label">🚗 В наличии</div><div class="value">${active.length}</div></div>
   <div class="kpi"><div class="label">💰 Вложено</div><div class="value">${euro(invested)}</div></div>
@@ -514,21 +448,45 @@ function readListings(){
 }
 async function saveCar(){
  const btn=document.getElementById('saveCarBtn');
- if(btn?.dataset.saving==='1'||cloudBusy)return;
- cloudBusy=true;if(btn){btn.dataset.saving='1';btn.disabled=true;btn.textContent='Сохраняем…';}
+ if(btn?.dataset.saving==='1')return;
+ if(btn){btn.dataset.saving='1';btn.disabled=true;btn.textContent='Сохраняем…';}
  try{
    const c={
-    id:editId||null,brand:brand.value.trim(),model:model.value.trim(),year:+year.value||0,mileage:+mileage.value||0,
+    id:editId||Date.now(),
+    brand:brand.value.trim(),model:model.value.trim(),year:+year.value||0,mileage:+mileage.value||0,
     vin:vin.value.trim(),status:status.value,purchaseDate:purchaseDate.value,ready:ready.value,
     purchase:+purchase.value||0,sale:+sale.value||0,note:note.value.trim(),photos:[...photos],
-    listings:readListings(),history:[]
+    listings:readListings(),history:[...(editId?(db.cars.find(x=>x.id===editId)?.history||[]):[])]
    };
    if(!c.brand||!c.model){alert('Укажи марку и модель');return;}
-   const id=await saveCarCloud(c);
-   await loadCloud();
-   closeModal();viewCar(id);
- }catch(err){console.error(err);alert('Не удалось сохранить автомобиль: '+(err.message||err));}
- finally{cloudBusy=false;if(btn){btn.disabled=false;btn.dataset.saving='';btn.textContent='Сохранить';}}
+   const old=editId?db.cars.find(x=>x.id===editId):null;
+   if(old){
+     if(old.status!==c.status)c.history.push({date:new Date().toISOString().slice(0,10),text:`Статус: ${old.status||'—'} → ${c.status}`});
+     if(+old.sale!==+c.sale)c.history.push({date:new Date().toISOString().slice(0,10),text:`Цена продажи: ${euro(old.sale)} → ${euro(c.sale)}`});
+   }else{
+     c.history.push({date:new Date().toISOString().slice(0,10),text:'Автомобиль добавлен'});
+   }
+   const i=db.cars.findIndex(x=>x.id===c.id);
+   if(i>=0)db.cars[i]=c;else db.cars.push(c);
+   if(!save()){
+     // If the browser quota is reached, preserve the car without photos.
+     const backup=[...c.photos]; c.photos=[];
+     if(i>=0)db.cars[i]=c;
+     if(!save()){
+       if(i>=0)db.cars[i]=old; else db.cars.pop();
+       throw new Error('QUOTA');
+     }
+     alert('Автомобиль сохранён, но фотографии не поместились в память браузера. Добавь меньше/меньше фото после очистки старых данных.');
+   }
+   try{await cloudUpsertCar(c);setCloudStatus('☁️ Авто сохранено в облако','ok');}catch(cloudErrObj){console.error(cloudErrObj);setCloudStatus('☁️ Сохранено локально · облако недоступно','warn');}
+   try{localStorage.setItem(KEY,JSON.stringify(db));}catch(e){}
+   closeModal();page('cars');
+ }catch(err){
+   console.error(err);
+   alert('Не удалось сохранить автомобиль. В браузере закончилась память CRM. Попробуй удалить старые фотографии.');
+ }finally{
+   if(btn){btn.disabled=false;btn.dataset.saving='';btn.textContent='Сохранить';}
+ }
 }
 let galleryPhotos=[], galleryIndex=0;
 function openLightbox(photos,index=0){
@@ -563,8 +521,15 @@ function setCarGallery(i){
  if(img)img.src=pics[galleryCurrent];
  const count=document.getElementById('carGalleryCounter');
  if(count)count.textContent=(galleryCurrent+1)+' / '+pics.length;
+ const thumbs=document.querySelectorAll('#carThumbs .photoItem');
+ thumbs.forEach((el,idx)=>el.classList.toggle('selected',idx===galleryCurrent));
 }
 function carGalleryMove(step){setCarGallery(galleryCurrent+step)}
+function openCarLightbox(i=galleryCurrent){
+ const c=db.cars.find(x=>x.id===currentCarGalleryId);
+ if(!c || !(c.photos||[]).length)return;
+ openLightbox(c.photos,i);
+}
 
 function viewCar(id){
  const c=db.cars.find(x=>x.id===id);if(!c)return;
@@ -573,15 +538,17 @@ function viewCar(id){
  const listings=Array.isArray(c.listings)?c.listings:[];
  const pics=Array.isArray(c.photos)?c.photos:[];
  const first=pics[0]||'';
+ currentCarGalleryId=id;
+ galleryCurrent=0;
  app.innerHTML=`<div class="top"><button class="btn secondary" onclick="page('cars')">← Назад</button>
  <div class="clientAction"><button class="btn secondary" onclick="openExpense(${id})">+ Расход</button><button class="btn secondary" onclick="addClient(${id})">+ Добавить клиента</button><button class="btn" onclick="openCar(${id})">Редактировать</button></div></div>
  <div class="detail">
  <div>
   <div class="heroGallery">
-   ${first?`<img id="heroMain" src="${first}" onclick="openLightbox(${JSON.stringify(pics)},galleryCurrent)">`:'<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#aaa">Нет фото</div>'}
+   ${first?`<img id="heroMain" src="${first}" onclick="openCarLightbox(galleryCurrent)">`:'<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#aaa">Нет фото</div>'}
    ${pics.length>1?`<button class="galleryArrow left" onclick="event.stopPropagation();carGalleryMove(-1)">‹</button><button class="galleryArrow right" onclick="event.stopPropagation();carGalleryMove(1)">›</button><span class="galleryCounter" id="carGalleryCounter">1 / ${pics.length}</span>`:''}
   </div>
-  <div class="photos">${pics.map((p,i)=>`<div class="photoItem" style="cursor:pointer" onclick="setCarGallery(${i})"><img class="thumb ${i===0?'main':''}" src="${p}">${i===0?'<span class="photoCover">ОБЛОЖКА</span>':''}</div>`).join('')}</div>
+  <div class="photos" id="carThumbs">${pics.map((p,i)=>`<div class="photoItem ${i===galleryCurrent?'selected':''}" style="cursor:pointer" onclick="setCarGallery(${i});event.stopPropagation()"><img class="thumb" src="${p}">${i===0?'<span class="photoCover">ОБЛОЖКА</span>':''}</div>`).join('')}</div>
   <div class="stat" style="margin-top:14px"><h3>📜 История</h3><div class="timeline">
    ${(c.history||[]).slice().reverse().map(h=>`<div class="timelineItem"><b>${esc(h.date)}</b><div>${esc(h.text)}</div></div>`).join('')||'<div class="muted">История пока пустая.</div>'}
   </div></div>
@@ -598,22 +565,12 @@ function viewCar(id){
   <h3>Расходы</h3>${ex.map(e=>`<div class="row"><span>${esc(e.category)}<br><small>${esc(e.date||'')}</small></span><b>${euro(e.amount)}</b></div>`).join('')||'<div class="muted">Расходов нет.</div>'}
   ${c.note?`<h3>Комментарий</h3><div class="muted" style="white-space:pre-wrap">${esc(c.note)}</div>`:''}
  </div></div>`;
- galleryCurrent=0;
- window.currentCarGalleryId=id;
 }
 function openExpense(carId){
  modalbox.innerHTML=`<h2>Добавить расход</h2><div class="formgrid"><label>Дата<input class="input" id="edate" type="date" value="${new Date().toISOString().slice(0,10)}"></label><label>Категория<select id="ecat"><option>Доставка</option><option>Таможня</option><option>Ремонт</option><option>Детейлинг</option><option>Документы</option><option>Реклама</option><option>Прочее</option></select></label><label>Сумма<input class="input" id="eamount" type="number"></label><label>Комментарий<input class="input" id="enote"></label></div><div style="margin-top:18px;text-align:right"><button class="btn secondary" onclick="closeModal()">Отмена</button> <button class="btn" onclick="saveExpense(${carId})">Сохранить</button></div>`;
  modal.classList.add('open');
 }
-async function saveExpense(carId){
- if(cloudBusy)return;
- cloudBusy=true;
- try{
-  await saveExpenseCloud({carId,date:edate.value,category:ecat.value,amount:+eamount.value||0,note:enote.value});
-  await loadCloud();closeModal();viewCar(carId);
- }catch(err){console.error(err);alert('Не удалось сохранить расход: '+(err.message||err));}
- finally{cloudBusy=false;}
-}
+async function saveExpense(carId){const e={id:Date.now(),carId,date:edate.value,category:ecat.value,amount:+eamount.value,note:enote.value};db.expenses.push(e);save();if(cloudReady){try{const c=db.cars.find(x=>x.id==carId);if(c?.cloudId){const r=await supa.from('car_expenses').insert({car_id:c.cloudId,category:e.category,amount:e.amount||0,expense_date:e.date||null,note:e.note||null}).select().single();if(r.error)throw r.error;e.cloudId=r.data.id;}}catch(err){console.error(err);setCloudStatus('☁️ Расход сохранён локально','warn')}}closeModal();viewCar(carId)}
 function closeModal(){modal.classList.remove('open')}
 
 function openClient(carId=null, clientId=null){
@@ -638,21 +595,23 @@ function openClient(carId=null, clientId=null){
  modal.classList.add('open');
 }
 async function saveClient(clientId=null){
- if(cloudBusy)return;
  const name=(document.getElementById('clName')?.value||'').trim();
  if(!name){alert('Укажите имя клиента');return;}
  const data={
-  id:clientId||null,name,
+  id:clientId||Date.now(),
+  name,
   phone:(document.getElementById('clPhone')?.value||'').trim(),
   budget:+(document.getElementById('clBudget')?.value||0),
   status:document.getElementById('clStatus')?.value||'Новый',
   note:(document.getElementById('clNote')?.value||'').trim(),
-  carIds:[...document.querySelectorAll('.clCar:checked')].map(x=>x.value)
+  carIds:[...document.querySelectorAll('.clCar:checked')].map(x=>Number(x.value))
  };
- cloudBusy=true;
- try{const id=await saveClientCloud(data);await loadCloud();closeModal();clients();}
- catch(err){console.error(err);alert('Не удалось сохранить клиента: '+(err.message||err));}
- finally{cloudBusy=false;}
+ const i=db.clients.findIndex(x=>x.id===data.id);
+ if(i>=0)db.clients[i]=data;else db.clients.push(data);
+ save();
+ if(cloudReady){try{await cloudUpsertClient(data);save();setCloudStatus('☁️ Клиент сохранён в облако','ok');}catch(err){console.error(err);setCloudStatus('☁️ Клиент сохранён локально','warn')}}
+ closeModal();
+ clients();
 }
 
 function clients(){
@@ -676,6 +635,8 @@ db.cars.forEach(c=>{
  if(!Array.isArray(c.history))c.history=[];
  if(!Array.isArray(c.photos))c.photos=[];
 });
-initCloud();
+page('dashboard');
+cloudInit();
+setTimeout(async()=>{ if(cloudReady){ const hadLocal=db.cars.length||db.clients.length||db.expenses.length; if(!hadLocal) await cloudLoad(); else setCloudStatus('☁️ Локальные данные · нажми синхронизацию','warn'); } },0);
 </script>
-<div id="cloudStatus" style="position:fixed;right:12px;bottom:12px;background:#166534;color:#fff;padding:7px 10px;border-radius:999px;font-size:11px;z-index:50">☁ Supabase</div></body></html>
+</body></html>
