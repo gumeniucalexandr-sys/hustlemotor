@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>HUSTLE MOTORS CRM</title>
+<title>HUSTLE MOTORS CRM v7.5</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f5f6f8;color:#17202a}
 .app{display:flex;min-height:100vh}.side{width:230px;background:#111827;color:#fff;padding:22px 14px;position:fixed;inset:0 auto 0 0}
@@ -98,7 +98,7 @@
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body>
+<body data-build="v7.5">
 <div class="app">
 <aside class="side"><div class="logo">HUSTLE MOTORS</div><div class="nav">
 <button data-page="dashboard">📊 Dashboard</button><button data-page="cars">🚗 Автомобили</button><button data-page="clients">👤 Клиенты</button><button data-page="deals">🤝 Сделки</button>
@@ -137,13 +137,13 @@ let photos=[]; let editId=null;
 // HUSTLE MOTORS v7 — Supabase is an optional cloud layer. Local CRM remains usable if cloud is unavailable.
 const SUPABASE_URL='https://jpzoghmpfdhyzisjtpza.supabase.co';
 const SUPABASE_KEY='sb_publishable_FP-wtxNOIFPOKj7d4Rk8fA_4BkeP_UM';
-let supa=null, cloudReady=false, cloudBusy=false;
+let hmCloudClient=null, cloudReady=false, cloudBusy=false;
 const cloudStatusEl=()=>document.getElementById('cloudStatus');
 function setCloudStatus(text,kind=''){const el=cloudStatusEl();if(!el)return;el.textContent=text;el.className='cloudStatus '+kind;}
 function cloudInit(){
   try{
-    if(!window.supabase?.createClient) throw new Error('Supabase SDK не загрузился');
-    supa=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
+    if(!window['supabase']?.createClient) throw new Error('Supabase SDK не загрузился');
+    hmCloudClient=window['supabase'].createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
     cloudReady=true; setCloudStatus('☁️ Облако подключено','ok');
     return true;
   }catch(e){console.error(e);cloudReady=false;setCloudStatus('☁️ Локальный режим','warn');return false;}
@@ -151,15 +151,15 @@ function cloudInit(){
 function cloudErr(prefix,e){console.error(prefix,e);setCloudStatus('☁️ Ошибка облака','err');}
 function localId(){return Date.now()+Math.floor(Math.random()*1000)}
 async function cloudLoad(){
- if(!cloudReady||!supa)return false;
+ if(!cloudReady||!hmCloudClient)return false;
  try{
   const [cr,er,cl,li,hi,cp]=await Promise.all([
-   supa.from('cars').select('*').order('created_at',{ascending:true}),
-   supa.from('car_expenses').select('*').order('created_at',{ascending:true}),
-   supa.from('clients').select('*').order('created_at',{ascending:true}),
-   supa.from('car_listings').select('*').order('created_at',{ascending:true}),
-   supa.from('car_history').select('*').order('event_date',{ascending:true}),
-   supa.from('car_photos').select('*').order('sort_order',{ascending:true})
+   hmCloudClient.from('cars').select('*').order('created_at',{ascending:true}),
+   hmCloudClient.from('car_expenses').select('*').order('created_at',{ascending:true}),
+   hmCloudClient.from('clients').select('*').order('created_at',{ascending:true}),
+   hmCloudClient.from('car_listings').select('*').order('created_at',{ascending:true}),
+   hmCloudClient.from('car_history').select('*').order('event_date',{ascending:true}),
+   hmCloudClient.from('car_photos').select('*').order('sort_order',{ascending:true})
   ]);
   const bad=[cr,er,cl,li,hi,cp].find(x=>x.error); if(bad) throw bad.error;
   const carMap=new Map();
@@ -171,7 +171,7 @@ async function cloudLoad(){
   (hi.data||[]).forEach(r=>{const c=db.cars.find(x=>x.cloudId===r.car_id);if(c)c.history.push({date:(r.event_date||'').slice(0,10),text:r.description||r.event_type||''});});
   (cl.data||[]).forEach(r=>db.clients.push({id:localId(),cloudId:r.id,name:r.name,phone:r.phone||'',budget:+r.budget||0,status:r.status||'Новый',note:r.note||'',carIds:[]}));
   // client_cars is loaded separately because it depends on the generated local ids above.
-  const cc=await supa.from('client_cars').select('*'); if(cc.error)throw cc.error;
+  const cc=await hmCloudClient.from('client_cars').select('*'); if(cc.error)throw cc.error;
   (cc.data||[]).forEach(r=>{const cl=db.clients.find(x=>x.cloudId===r.client_id),c=db.cars.find(x=>x.cloudId===r.car_id);if(cl&&c)cl.carIds.push(c.id);});
   try{localStorage.setItem(KEY,JSON.stringify(db));}catch(e){}
   setCloudStatus(`☁️ Облако · ${db.cars.length} авто`,'ok'); page('dashboard'); return true;
@@ -180,20 +180,20 @@ async function cloudLoad(){
 async function uploadPhotoData(carCloudId,dataUrl,index){
  const blob=await (await fetch(dataUrl)).blob();
  const path=`${carCloudId}/${Date.now()}_${index}.jpg`;
- const up=await supa.storage.from('car-photos').upload(path,blob,{contentType:'image/jpeg',upsert:true});
+ const up=await hmCloudClient.storage.from('car-photos').upload(path,blob,{contentType:'image/jpeg',upsert:true});
  if(up.error)throw up.error; return path;
 }
 async function cloudUpsertCar(c){
  if(!cloudReady)return;
  const payload={brand:c.brand,model:c.model,year:c.year||null,mileage:c.mileage||null,vin:c.vin||null,status:c.status,purchase_date:c.purchaseDate||null,ready_date:c.ready||null,purchase_price:c.purchase||0,sale_price:c.sale||0,note:c.note||null};
  let row;
- if(c.cloudId){const r=await supa.from('cars').update(payload).eq('id',c.cloudId).select().single();if(r.error)throw r.error;row=r.data;}
- else {const r=await supa.from('cars').insert(payload).select().single();if(r.error)throw r.error;row=r.data;c.cloudId=row.id;}
+ if(c.cloudId){const r=await hmCloudClient.from('cars').update(payload).eq('id',c.cloudId).select().single();if(r.error)throw r.error;row=r.data;}
+ else {const r=await hmCloudClient.from('cars').insert(payload).select().single();if(r.error)throw r.error;row=r.data;c.cloudId=row.id;}
  // Replace listings. This is intentionally simple and reliable for this MVP.
- await supa.from('car_listings').delete().eq('car_id',c.cloudId);
- if(c.listings?.length){const r=await supa.from('car_listings').insert(c.listings.map(x=>({car_id:c.cloudId,platform:x.site,price:x.price||null,url:x.url||null})));if(r.error)throw r.error;}
+ await hmCloudClient.from('car_listings').delete().eq('car_id',c.cloudId);
+ if(c.listings?.length){const r=await hmCloudClient.from('car_listings').insert(c.listings.map(x=>({car_id:c.cloudId,platform:x.site,price:x.price||null,url:x.url||null})));if(r.error)throw r.error;}
  // Photos: upload current data URLs and rebuild photo rows. Existing public URLs are retained.
- await supa.from('car_photos').delete().eq('car_id',c.cloudId);
+ await hmCloudClient.from('car_photos').delete().eq('car_id',c.cloudId);
  const photoRows=[];
  for(let i=0;i<(c.photos||[]).length;i++){
    let path=c.photos[i];
@@ -201,7 +201,7 @@ async function cloudUpsertCar(c){
    else { const m=path.match(/car-photos\/([^?]+)(?:\?.*)?$/); if(m)path=m[1]; }
    photoRows.push({car_id:c.cloudId,storage_path:path,sort_order:i,is_cover:i===0});
  }
- if(photoRows.length){const r=await supa.from('car_photos').insert(photoRows);if(r.error)throw r.error;}
+ if(photoRows.length){const r=await hmCloudClient.from('car_photos').insert(photoRows);if(r.error)throw r.error;}
  // Append current history to cloud when not already represented is intentionally omitted here; status/price changes are saved locally and can be pushed by sync later.
  return row;
 }
@@ -209,18 +209,18 @@ async function cloudUpsertClient(cl){
  if(!cloudReady)return;
  const payload={name:cl.name,phone:cl.phone||null,email:cl.email||null,budget:cl.budget||null,status:cl.status||'Новый',note:cl.note||null};
  let row;
- if(cl.cloudId){const r=await supa.from('clients').update(payload).eq('id',cl.cloudId).select().single();if(r.error)throw r.error;row=r.data;}
- else {const r=await supa.from('clients').insert(payload).select().single();if(r.error)throw r.error;row=r.data;cl.cloudId=row.id;}
- await supa.from('client_cars').delete().eq('client_id',cl.cloudId);
+ if(cl.cloudId){const r=await hmCloudClient.from('clients').update(payload).eq('id',cl.cloudId).select().single();if(r.error)throw r.error;row=r.data;}
+ else {const r=await hmCloudClient.from('clients').insert(payload).select().single();if(r.error)throw r.error;row=r.data;cl.cloudId=row.id;}
+ await hmCloudClient.from('client_cars').delete().eq('client_id',cl.cloudId);
  const links=(cl.carIds||[]).map(id=>db.cars.find(c=>c.id==id)).filter(Boolean).map(c=>({client_id:cl.cloudId,car_id:c.cloudId})).filter(x=>x.car_id);
- if(links.length){const r=await supa.from('client_cars').insert(links);if(r.error)throw r.error;}
+ if(links.length){const r=await hmCloudClient.from('client_cars').insert(links);if(r.error)throw r.error;}
 }
 async function cloudSync(){
  if(cloudBusy||!cloudReady)return;
  cloudBusy=true;setCloudStatus('☁️ Синхронизация…','warn');
  try{
   for(const c of db.cars)await cloudUpsertCar(c);
-  for(const e of db.expenses){const c=db.cars.find(x=>x.id==e.carId);if(!c?.cloudId)continue;const payload={car_id:c.cloudId,category:e.category,amount:e.amount||0,expense_date:e.date||null,note:e.note||null}; if(e.cloudId){const r=await supa.from('car_expenses').update(payload).eq('id',e.cloudId);if(r.error)throw r.error;}else{const r=await supa.from('car_expenses').insert(payload).select().single();if(r.error)throw r.error;e.cloudId=r.data.id;}}
+  for(const e of db.expenses){const c=db.cars.find(x=>x.id==e.carId);if(!c?.cloudId)continue;const payload={car_id:c.cloudId,category:e.category,amount:e.amount||0,expense_date:e.date||null,note:e.note||null}; if(e.cloudId){const r=await hmCloudClient.from('car_expenses').update(payload).eq('id',e.cloudId);if(r.error)throw r.error;}else{const r=await hmCloudClient.from('car_expenses').insert(payload).select().single();if(r.error)throw r.error;e.cloudId=r.data.id;}}
   for(const cl of db.clients)await cloudUpsertClient(cl);
   try{localStorage.setItem(KEY,JSON.stringify(db));}catch(e){}
   setCloudStatus(`☁️ Синхронизировано · ${db.cars.length} авто`,'ok');
@@ -570,7 +570,7 @@ function openExpense(carId){
  modalbox.innerHTML=`<h2>Добавить расход</h2><div class="formgrid"><label>Дата<input class="input" id="edate" type="date" value="${new Date().toISOString().slice(0,10)}"></label><label>Категория<select id="ecat"><option>Доставка</option><option>Таможня</option><option>Ремонт</option><option>Детейлинг</option><option>Документы</option><option>Реклама</option><option>Прочее</option></select></label><label>Сумма<input class="input" id="eamount" type="number"></label><label>Комментарий<input class="input" id="enote"></label></div><div style="margin-top:18px;text-align:right"><button class="btn secondary" onclick="closeModal()">Отмена</button> <button class="btn" onclick="saveExpense(${carId})">Сохранить</button></div>`;
  modal.classList.add('open');
 }
-async function saveExpense(carId){const e={id:Date.now(),carId,date:edate.value,category:ecat.value,amount:+eamount.value,note:enote.value};db.expenses.push(e);save();if(cloudReady){try{const c=db.cars.find(x=>x.id==carId);if(c?.cloudId){const r=await supa.from('car_expenses').insert({car_id:c.cloudId,category:e.category,amount:e.amount||0,expense_date:e.date||null,note:e.note||null}).select().single();if(r.error)throw r.error;e.cloudId=r.data.id;}}catch(err){console.error(err);setCloudStatus('☁️ Расход сохранён локально','warn')}}closeModal();viewCar(carId)}
+async function saveExpense(carId){const e={id:Date.now(),carId,date:edate.value,category:ecat.value,amount:+eamount.value,note:enote.value};db.expenses.push(e);save();if(cloudReady){try{const c=db.cars.find(x=>x.id==carId);if(c?.cloudId){const r=await hmCloudClient.from('car_expenses').insert({car_id:c.cloudId,category:e.category,amount:e.amount||0,expense_date:e.date||null,note:e.note||null}).select().single();if(r.error)throw r.error;e.cloudId=r.data.id;}}catch(err){console.error(err);setCloudStatus('☁️ Расход сохранён локально','warn')}}closeModal();viewCar(carId)}
 function closeModal(){modal.classList.remove('open')}
 
 function openClient(carId=null, clientId=null){
