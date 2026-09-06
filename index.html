@@ -134,7 +134,7 @@ db.cars.forEach(c=>{
 });
 let photos=[]; let editId=null;
 
-// HUSTLE MOTORS v7.6 — Supabase is an optional cloud layer. Local CRM never waits for cloud.
+// HUSTLE MOTORS v7.7 — Supabase is an optional cloud layer. Local CRM never waits for cloud.
 const SUPABASE_URL='https://jpzoghmpfdhyzisjtpza.supabase.co';
 const SUPABASE_KEY='sb_publishable_70e1x7fKJowSMUpp_vhcvQ_dHW8yvAj';
 let hmCloudClient=null, cloudReady=false, cloudBusy=false;
@@ -263,7 +263,7 @@ function dashboard(){
  const profit=sold.reduce((s,c)=>s+(+c.sale||0)-cost(c),0);
  const avgDays=active.length?Math.round(active.reduce((s,c)=>s+days(c),0)/active.length):0;
  const attention=active.filter(c=>days(c)>60).sort((a,b)=>days(b)-days(a)).slice(0,8);
- app.innerHTML=`<div class="top"><h1>Dashboard</h1><div class="cloudBar"><span id="cloudStatus" class="cloudStatus">☁️ v7.6 · запуск…</span><button class="btn secondary" onclick="cloudSync()">↻ Синхронизировать</button><button class="btn" onclick="openCar()">+ Добавить авто</button></div></div>
+ app.innerHTML=`<div class="top"><h1>Dashboard</h1><div class="cloudBar"><span id="cloudStatus" class="cloudStatus">☁️ v7.7 · запуск…</span><button class="btn secondary" onclick="cloudSync()">↻ Синхронизировать</button><button class="btn" onclick="openCar()">+ Добавить авто</button></div></div>
  <div class="statGrid">
   <div class="kpi"><div class="label">🚗 В наличии</div><div class="value">${active.length}</div></div>
   <div class="kpi"><div class="label">💰 Вложено</div><div class="value">${euro(invested)}</div></div>
