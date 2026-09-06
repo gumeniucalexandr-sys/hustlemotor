@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HUSTLE MOTORS CRM</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f5f6f8;color:#17202a}
+.app{display:flex;min-height:100vh}.side{width:230px;background:#111827;color:#fff;padding:22px 14px;position:fixed;inset:0 auto 0 0}
+.logo{font-size:20px;font-weight:800;padding:8px 12px 28px}.nav button{width:100%;border:0;background:transparent;color:#cbd5e1;text-align:left;padding:12px;border-radius:9px;margin:3px 0;cursor:pointer;font-size:14px}.nav button.active,.nav button:hover{background:#253044;color:#fff}
+.main{margin-left:230px;width:calc(100% - 230px);padding:28px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}h1{margin:0;font-size:26px}.btn{border:0;border-radius:9px;padding:11px 16px;background:#1f4e78;color:white;cursor:pointer;font-weight:700}.btn.secondary{background:#e5e7eb;color:#111827}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.stat{background:white;border-radius:14px;padding:18px;box-shadow:0 1px 3px #00000012}.stat b{display:block;font-size:24px;margin-top:8px}.toolbar{display:flex;gap:10px;margin:16px 0}.input,select{padding:11px;border:1px solid #d5dae1;border-radius:9px;background:#fff}.toolbar .input{flex:1}
+.cars{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}.card{background:#fff;border-radius:15px;overflow:hidden;box-shadow:0 2px 8px #00000010;cursor:pointer}.photo{height:180px;background:#e5e7eb;display:flex;align-items:center;justify-content:center;color:#6b7280}.photo img{width:100%;height:100%;object-fit:cover}.cardbody{padding:15px}.price{font-size:20px;font-weight:800;margin:7px 0}.muted{color:#6b7280;font-size:13px}.badge{display:inline-block;padding:5px 8px;border-radius:99px;background:#dcfce7;color:#166534;font-size:12px;margin-top:8px}.badge.reserve{background:#fef3c7;color:#92400e}.badge.sold{background:#e5e7eb;color:#374151}
+.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}.modalbox{background:#fff;border-radius:16px;max-width:900px;width:100%;max-height:92vh;overflow:auto;padding:24px}.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.formgrid label{font-size:13px;color:#4b5563}.formgrid input,.formgrid select,.formgrid textarea{width:100%;margin-top:5px}.full{grid-column:1/-1}.photos{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.thumb{width:110px;height:82px;object-fit:cover;border-radius:8px;border:2px solid transparent;cursor:pointer;display:block}.photoItem{position:relative;display:inline-block;margin:3px;cursor:grab}.photoItem.dragging{opacity:.45}.photoDelete{position:absolute;right:5px;top:5px;border:0;background:#000b;color:#fff;width:25px;height:25px;border-radius:50%;cursor:pointer;font-size:16px;line-height:22px}.photoCover{position:absolute;left:5px;bottom:5px;background:#1f4e78;color:#fff;border-radius:6px;padding:3px 6px;font-size:10px}.photoHint{margin-top:7px;color:#6b7280;font-size:12px}.thumb.main{border-color:#1f4e78}
+.lightbox{position:fixed;inset:0;background:#000d;display:none;align-items:center;justify-content:center;z-index:20;padding:30px}.lightbox.open{display:flex}.lightbox img{max-width:90vw;max-height:82vh;object-fit:contain;border-radius:10px}.lbbtn{position:absolute;border:0;background:#ffffff22;color:white;font-size:34px;width:48px;height:48px;border-radius:50%;cursor:pointer}.lbclose{right:24px;top:18px}.lbprev{left:24px;top:50%;transform:translateY(-50%)}.lbnext{right:24px;top:50%;transform:translateY(-50%)}.lbcount{position:absolute;bottom:20px;color:white;font-size:14px}
+.detail{display:grid;grid-template-columns:1.25fr 1fr;gap:22px}.hero{width:100%;height:330px;object-fit:cover;border-radius:14px;background:#eee}.info{background:#fff;border-radius:14px;padding:20px}.row{display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding:9px 0}.danger{color:#b91c1c}.ok{color:#166534}.empty{padding:50px;text-align:center;color:#6b7280;background:#fff;border-radius:14px}
+@media(max-width:800px){.side{width:70px}.logo{font-size:0}.logo:after{content:"A";font-size:22px}.nav button{font-size:0;text-align:center}.nav button:before{font-size:18px}.main{margin-left:70px;width:calc(100% - 70px);padding:16px}.grid{grid-template-columns:repeat(2,1fr)}.detail{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}}
+
+.photoAddTile{
+  width:110px;height:82px;box-sizing:border-box;
+  border:2px dashed #c7ccd4;border-radius:8px;background:#f8f9fb;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;color:#6b7280;font-weight:700;font-size:11px;
+  flex:0 0 110px;
+}
+.photoAddTile .plus{font-size:25px;line-height:22px;font-weight:400}
+.photoAddTile:hover{background:#eef1f5;border-color:#9aa2ad}
+#file{display:none!important}
+
+
+/* HUSTLE MOTORS v5 */
+.statGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kpi{background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 8px #0000000b}
+.kpi .label{font-size:12px;color:#6b7280}.kpi .value{font-size:23px;font-weight:800;margin-top:6px}
+.carMeta{display:flex;justify-content:space-between;align-items:center;margin-top:9px;gap:8px}
+.age{font-size:12px;font-weight:700}.age.good{color:#166534}.age.warn{color:#a16207}.age.bad{color:#b91c1c}
+.profitMini{font-size:12px;font-weight:700}
+.detailHeader{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}
+.financeBox{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:14px}
+.financeBox>div{background:#f8fafc;border-radius:10px;padding:11px}
+.financeBox small{display:block;color:#6b7280;font-size:11px}.financeBox b{display:block;margin-top:4px}
+.timeline{border-left:2px solid #e5e7eb;margin:12px 0 0 6px;padding-left:15px}
+.timelineItem{position:relative;margin:0 0 14px}.timelineItem:before{content:"";position:absolute;width:8px;height:8px;border-radius:50%;background:#1f4e78;left:-20px;top:5px}
+.listingGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:10px}
+.listing{background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:10px}
+.clientPill{display:inline-block;background:#eef2ff;border-radius:999px;padding:5px 9px;margin:3px;font-size:12px}
+.sortSelect{min-width:190px}
+@media(max-width:900px){.statGrid{grid-template-columns:repeat(2,1fr)}.financeBox{grid-template-columns:repeat(2,1fr)}.listingGrid{grid-template-columns:1fr}}
+@media(max-width:600px){.statGrid{grid-template-columns:1fr}.financeBox{grid-template-columns:1fr}}
+
+
+/* v5.1 */
+.heroGallery{
+  position:relative;
+  width:100%;
+  border-radius:16px;
+  overflow:hidden;
+  background:#111;
+  aspect-ratio:16/10;
+  min-height:360px;
+}
+.heroGallery img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  cursor:pointer;
+}
+.galleryArrow{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:44px;height:44px;
+  border:0;border-radius:50%;
+  background:rgba(0,0,0,.58);
+  color:#fff;font-size:28px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;z-index:3;
+}
+.galleryArrow:hover{background:rgba(0,0,0,.78)}
+.galleryArrow.left{left:14px}.galleryArrow.right{right:14px}
+.galleryCounter{
+  position:absolute;right:14px;bottom:12px;
+  padding:5px 9px;border-radius:999px;
+  background:rgba(0,0,0,.62);color:#fff;font-size:12px;z-index:3
+}
+.clientModalGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.clientModalGrid .full{grid-column:1/-1}
+.clientCarList{max-height:190px;overflow:auto;border:1px solid #e5e7eb;border-radius:10px;padding:8px}
+.clientCarOption{display:flex;gap:8px;align-items:center;padding:7px 5px}
+.clientCarOption input{width:auto}
+.clientAction{display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:700px){.clientModalGrid{grid-template-columns:1fr}.clientModalGrid .full{grid-column:auto}.heroGallery{min-height:240px}}
+
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side"><div class="logo">HUSTLE MOTORS<div style="font-size:10px;font-weight:500;color:#94a3b8;margin-top:5px">☁ CLOUD CRM</div></div><div class="nav">
+<button data-page="dashboard">📊 Dashboard</button><button data-page="cars">🚗 Автомобили</button><button data-page="clients">👤 Клиенты</button><button data-page="deals">🤝 Сделки</button>
+</div></aside>
+<main class="main" id="app"></main>
+</div>
+
+<div class="modal" id="modal"><div class="modalbox" id="modalbox"></div></div>
+<div class="lightbox" id="lightbox" onclick="if(event.target===this)closeLightbox()">
+  <button class="lbbtn lbclose" onclick="closeLightbox()">×</button>
+  <button class="lbbtn lbprev" onclick="galleryMove(-1)">‹</button>
+  <img id="lightboxImg" src="">
+  <button class="lbbtn lbnext" onclick="galleryMove(1)">›</button>
+  <div class="lbcount" id="lbcount"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+
+const SUPABASE_URL = 'https://jpzoghmpfdhyzisjtpza.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_FP-wtxNOIFPOKj7d4Rk8fA_4BkeP_UM';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+let cloudReady=false;
+let cloudBusy=false;
+
+function normalizeCar(row, photosRows=[]){
+  const pics=photosRows.filter(x=>String(x.car_id)===String(row.id)).sort((a,b)=>a.sort_order-b.sort_order)
+    .map(x=>x.public_url||'').filter(Boolean);
+  return {
+    id:row.id, brand:row.brand||'', model:row.model||'', year:row.year||0, mileage:row.mileage||0,
+    vin:row.vin||'', status:row.status||'В продаже', purchaseDate:row.purchase_date||'', ready:row.ready_date||'',
+    purchase:+row.purchase_price||0, sale:+row.sale_price||0, note:row.note||'', photos:pics,
+    listings:[], history:[]
+  };
+}
+
+async function loadCloud(){
+  const [carsR,photosR,expR,clientsR,linksR,listingsR,historyR,dealsR]=await Promise.all([
+    supabase.from('cars').select('*').order('created_at',{ascending:false}),
+    supabase.from('car_photos').select('*').order('sort_order'),
+    supabase.from('car_expenses').select('*').order('expense_date',{ascending:false}),
+    supabase.from('clients').select('*').order('created_at',{ascending:false}),
+    supabase.from('client_cars').select('*'),
+    supabase.from('car_listings').select('*').order('created_at',{ascending:false}),
+    supabase.from('car_history').select('*').order('event_date',{ascending:true}),
+    supabase.from('deals').select('*').order('created_at',{ascending:false})
+  ]);
+  for(const r of [carsR,photosR,expR,clientsR,linksR,listingsR,historyR,dealsR]){
+    if(r.error) throw r.error;
+  }
+  const publicUrl=(path)=>{
+    if(!path)return '';
+    return supabase.storage.from('car-photos').getPublicUrl(path).data.publicUrl;
+  };
+  const photoRows=photosR.data.map(x=>({...x,public_url:publicUrl(x.storage_path)}));
+  db.cars=carsR.data.map(c=>{
+    const x=normalizeCar(c,photoRows);
+    x.listings=listingsR.data.filter(l=>String(l.car_id)===String(c.id)).map(l=>({id:l.id,site:l.platform,price:+l.price||0,url:l.url||'',publishedAt:l.published_at||''}));
+    x.history=historyR.data.filter(h=>String(h.car_id)===String(c.id)).map(h=>({id:h.id,date:(h.event_date||'').slice(0,10),text:h.description,type:h.event_type}));
+    return x;
+  });
+  db.expenses=expR.data.map(e=>({id:e.id,carId:e.car_id,date:e.expense_date,category:e.category,amount:+e.amount||0,note:e.note||''}));
+  db.clients=clientsR.data.map(c=>({
+    id:c.id,name:c.name,phone:c.phone||'',email:c.email||'',budget:+c.budget||0,status:c.status||'Новый',note:c.note||'',
+    carIds:linksR.data.filter(x=>String(x.client_id)===String(c.id)).map(x=>x.car_id)
+  }));
+  db.deals=dealsR.data.map(d=>({id:d.id,carId:d.car_id,clientId:d.client_id,price:+d.sale_price||0,saleDate:d.sale_date,status:d.status,note:d.note||''}));
+  cloudReady=true;
+  const s=document.getElementById('cloudStatus');if(s){s.textContent='☁ Supabase подключён';s.style.background='#166534';}
+  return true;
+}
+
+async function uploadDataUrl(dataUrl, path){
+  const res=await fetch(dataUrl);
+  const blob=await res.blob();
+  const {error}=await supabase.storage.from('car-photos').upload(path,blob,{contentType:'image/jpeg',upsert:false});
+  if(error) throw error;
+  return path;
+}
+
+async function replaceCarPhotos(carId, dataUrls){
+  const {data:old,error:oldErr}=await supabase.from('car_photos').select('id,storage_path').eq('car_id',carId);
+  if(oldErr) throw oldErr;
+  if(old?.length){
+    await supabase.storage.from('car-photos').remove(old.map(x=>x.storage_path));
+    const {error}=await supabase.from('car_photos').delete().eq('car_id',carId);
+    if(error) throw error;
+  }
+  const urls=[];
+  for(let i=0;i<dataUrls.length;i++){
+    const src=dataUrls[i];
+    if(!src) continue;
+    let path;
+    if(src.startsWith('http')) {
+      const m=src.match(/car-photos\/([^?]+)(?:\?.*)?$/);
+      path=m?decodeURIComponent(m[1]):null;
+    } else {
+      path=carId+'/'+Date.now()+'_'+i+'.jpg';
+      await uploadDataUrl(src,path);
+    }
+    if(path){
+      const {error}=await supabase.from('car_photos').insert({car_id:carId,storage_path:path,sort_order:i,is_cover:i===0});
+      if(error) throw error;
+      urls.push(supabase.storage.from('car-photos').getPublicUrl(path).data.publicUrl);
+    }
+  }
+  return urls;
+}
+
+async function saveCarCloud(c){
+  let carId=c.id;
+  const payload={
+    brand:c.brand,model:c.model,year:c.year||null,mileage:c.mileage||null,vin:c.vin||null,status:c.status||'В продаже',
+    purchase_date:c.purchaseDate||null,ready_date:c.ready||null,purchase_price:c.purchase||0,sale_price:c.sale||0,note:c.note||null
+  };
+  if(carId){
+    const {error}=await supabase.from('cars').update(payload).eq('id',carId);
+    if(error) throw error;
+  }else{
+    const {data,error}=await supabase.from('cars').insert(payload).select().single();
+    if(error) throw error;
+    carId=data.id;
+  }
+  await replaceCarPhotos(carId,c.photos||[]);
+  const {error:delL}=await supabase.from('car_listings').delete().eq('car_id',carId);
+  if(delL) throw delL;
+  if(c.listings?.length){
+    const rows=c.listings.map(l=>({car_id:carId,platform:l.site||'Площадка',price:l.price||null,url:l.url||null,published_at:l.publishedAt||null}));
+    const {error}=await supabase.from('car_listings').insert(rows);
+    if(error) throw error;
+  }
+  if(!c.id){
+    const {error}=await supabase.from('car_history').insert({car_id:carId,event_type:'created',description:'Автомобиль добавлен'});
+    if(error) throw error;
+  }
+  return carId;
+}
+
+async function saveClientCloud(c){
+  let id=c.id;
+  const payload={name:c.name,phone:c.phone||null,email:c.email||null,budget:c.budget||null,status:c.status||'Новый',note:c.note||null};
+  if(id){
+    const {error}=await supabase.from('clients').update(payload).eq('id',id);
+    if(error) throw error;
+  }else{
+    const {data,error}=await supabase.from('clients').insert(payload).select().single();
+    if(error) throw error;
+    id=data.id;
+  }
+  const {error:del}=await supabase.from('client_cars').delete().eq('client_id',id);
+  if(del) throw del;
+  if(c.carIds?.length){
+    const {error}=await supabase.from('client_cars').insert(c.carIds.map(car_id=>({client_id:id,car_id})));
+    if(error) throw error;
+  }
+  return id;
+}
+
+async function saveExpenseCloud(e){
+  const {data,error}=await supabase.from('car_expenses').insert({
+    car_id:e.carId,expense_date:e.date||null,category:e.category,amount:e.amount||0,note:e.note||null
+  }).select().single();
+  if(error) throw error;
+  return data;
+}
+
+async function refreshCloud(){
+  await loadCloud();
+  page('cars');
+}
+
+async function initCloud(){
+  try{
+    await loadCloud();
+    page('dashboard');
+  }catch(err){
+    console.error('Supabase init error:',err);
+    cloudReady=false;
+    const s=document.getElementById('cloudStatus');if(s){s.textContent='⚠ Нет соединения';s.style.background='#b91c1c';}
+    alert('Не удалось подключиться к Supabase: '+(err.message||err));
+    page('dashboard');
+  }
+}
+const KEY='abuv_auto_crm_v1';
+let db;
+try{
+  db=JSON.parse(localStorage.getItem(KEY)||'{"cars":[],"clients":[],"deals":[],"expenses":[]}');
+}catch(e){
+  db={cars:[],clients:[],deals:[],expenses:[]};
+}
+db.cars=Array.isArray(db.cars)?db.cars:[];
+db.clients=Array.isArray(db.clients)?db.clients:[];
+db.deals=Array.isArray(db.deals)?db.deals:[];
+db.expenses=Array.isArray(db.expenses)?db.expenses:[];
+db.cars.forEach(c=>{
+  if(!Array.isArray(c.photos))c.photos=[];
+  if(!Array.isArray(c.listings))c.listings=[];
+  if(!Array.isArray(c.history))c.history=[];
+});
+let photos=[]; let editId=null;
+const save=()=>{
+  try{
+    localStorage.setItem(KEY,JSON.stringify(db));
+    return true;
+  }catch(e){
+    console.error('Storage quota:',e);
+    return false;
+  }
+};
+const euro=n=>'€'+Number(n||0).toLocaleString('de-DE',{minimumFractionDigits:0,maximumFractionDigits:2});
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+function page(name){
+ document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===name));
+ if(name==='dashboard') dashboard(); else if(name==='cars') cars(); else if(name==='clients') clients(); else deals();
+}
+function dashboard(){
+ const active=db.cars.filter(c=>c.status!=='Продана'), sold=db.cars.filter(c=>c.status==='Продана');
+ const invested=active.reduce((s,c)=>s+cost(c),0);
+ const potential=active.reduce((s,c)=>s+(+c.sale||0)-cost(c),0);
+ const profit=sold.reduce((s,c)=>s+(+c.sale||0)-cost(c),0);
+ const avgDays=active.length?Math.round(active.reduce((s,c)=>s+days(c),0)/active.length):0;
+ const attention=active.filter(c=>days(c)>60).sort((a,b)=>days(b)-days(a)).slice(0,8);
+ app.innerHTML=`<div class="top"><h1>Dashboard</h1><button class="btn" onclick="openCar()">+ Добавить авто</button></div>
+ <div class="statGrid">
+  <div class="kpi"><div class="label">🚗 В наличии</div><div class="value">${active.length}</div></div>
+  <div class="kpi"><div class="label">💰 Вложено</div><div class="value">${euro(invested)}</div></div>
+  <div class="kpi"><div class="label">📈 Потенциальная прибыль</div><div class="value">${euro(potential)}</div></div>
+  <div class="kpi"><div class="label">⏱ Средний срок</div><div class="value">${avgDays} дн.</div></div>
+ </div>
+ <div style="height:14px"></div>
+ <div class="statGrid">
+  <div class="kpi"><div class="label">💵 Прибыль с проданных</div><div class="value">${euro(profit)}</div></div>
+  <div class="kpi"><div class="label">✅ Продано</div><div class="value">${sold.length}</div></div>
+  <div class="kpi"><div class="label">🔧 В расходах</div><div class="value">${euro(db.expenses.reduce((s,e)=>s+(+e.amount||0),0))}</div></div>
+  <div class="kpi"><div class="label">👤 Клиенты</div><div class="value">${db.clients.length}</div></div>
+ </div>
+ <div style="height:18px"></div>
+ <div class="stat"><h3>⚠️ Автомобили, требующие внимания</h3>
+ ${attention.map(c=>`<div class="row" style="cursor:pointer" onclick="viewCar(${c.id})"><span>${esc(c.brand)} ${esc(c.model)}<br><small>${euro(c.sale)} · прибыль ${euro((+c.sale||0)-cost(c))}</small></span><b class="${days(c)>90?'danger':''}">${days(c)} дней</b></div>`).join('')||'<div class="muted">Пока нет машин старше 60 дней.</div>'}
+ </div>`;
+}
+function cost(c){return (+c.purchase||0)+db.expenses.filter(e=>e.carId==c.id).reduce((s,e)=>s+(+e.amount||0),0)}
+function days(c){
+ const start=c.ready||c.purchaseDate;
+ if(!start)return 0;
+ const d=Math.floor((Date.now()-new Date(start))/86400000);
+ return Math.max(0,d);
+}
+function ageClass(c){
+ const d=days(c);
+ return d>60?'bad':d>30?'warn':'good';
+}
+function cars(){
+ app.innerHTML=`<div class="top"><h1>Автомобили</h1><button class="btn" onclick="openCar()">+ Добавить авто</button></div>
+ <div class="toolbar">
+  <input class="input" id="search" placeholder="Поиск: BMW, VIN, модель..." oninput="renderCars()">
+  <select id="filter" onchange="renderCars()"><option>Все</option><option>В продаже</option><option>Резерв</option><option>Продана</option><option>Не готова</option></select>
+  <select id="sortCars" class="sortSelect" onchange="renderCars()">
+   <option value="new">Сначала новые</option><option value="age">Дольше всего стоит</option>
+   <option value="profit">По прибыли</option><option value="price">По цене</option><option value="year">По году</option>
+  </select>
+ </div><div id="carlist"></div>`;
+ renderCars();
+}
+function renderCars(){
+ const q=(document.getElementById('search')?.value||'').toLowerCase();
+ const f=document.getElementById('filter')?.value||'Все';
+ const s=document.getElementById('sortCars')?.value||'new';
+ let arr=db.cars.filter(c=>(f==='Все'||c.status===f)&&[c.brand,c.model,c.vin].join(' ').toLowerCase().includes(q));
+ if(s==='age')arr.sort((a,b)=>days(b)-days(a));
+ if(s==='profit')arr.sort((a,b)=>((+b.sale||0)-cost(b))-((+a.sale||0)-cost(a)));
+ if(s==='price')arr.sort((a,b)=>(+b.sale||0)-(+a.sale||0));
+ if(s==='year')arr.sort((a,b)=>(+b.year||0)-(+a.year||0));
+ if(s==='new')arr.sort((a,b)=>(+b.id||0)-(+a.id||0));
+ carlist.innerHTML=arr.length?`<div class="cars">${arr.map(c=>{
+   const pr=(+c.sale||0)-cost(c), age=days(c);
+   return `<div class="card" onclick="viewCar(${c.id})">
+    <div class="photo">${c.photos?.[0]?`<img src="${c.photos[0]}">`:'Нет фото'}</div>
+    <div class="cardbody"><b>${esc(c.brand)} ${esc(c.model)}</b>
+    <div class="price">${euro(c.sale)}</div>
+    <div class="muted">${esc(c.year)} · ${Number(c.mileage||0).toLocaleString()} км</div>
+    <div class="carMeta"><span class="badge ${c.status==='Продана'?'sold':c.status==='Резерв'?'reserve':''}">${esc(c.status||'В продаже')}</span>
+    ${c.status!=='Продана'?`<span class="age ${ageClass(c)}">${age} дн.</span>`:''}</div>
+    <div class="profitMini ${pr>=0?'ok':'danger'}">Прибыль: ${euro(pr)}</div>
+    </div></div>`;
+ }).join('')}</div>`:'<div class="empty">Автомобилей не найдено.</div>';
+}
+function openCar(id=null){
+ editId=id; photos=id?[...(db.cars.find(c=>c.id===id)?.photos||[])]:[];
+ const c=id?db.cars.find(x=>x.id===id):{};
+ const listings=Array.isArray(c.listings)?c.listings:[];
+ modalbox.innerHTML=`<h2>${id?'Редактировать':'Добавить'} автомобиль</h2>
+ <div class="formgrid">
+ <label>Марка<input class="input" id="brand" value="${esc(c.brand)}"></label><label>Модель<input class="input" id="model" value="${esc(c.model)}"></label>
+ <label>Год<input class="input" id="year" type="number" value="${c.year||''}"></label><label>Пробег<input class="input" id="mileage" type="number" value="${c.mileage||''}"></label>
+ <label>VIN<input class="input" id="vin" value="${esc(c.vin)}"></label><label>Статус<select id="status"><option>В продаже</option><option>Резерв</option><option>Продана</option><option>Не готова</option></select></label>
+ <label>Дата покупки<input class="input" id="purchaseDate" type="date" value="${c.purchaseDate||''}"></label><label>Дата готовности<input class="input" id="ready" type="date" value="${c.ready||''}"></label>
+ <label>Цена покупки<input class="input" id="purchase" type="number" value="${c.purchase||''}"></label>
+ <label>Цена продажи<input class="input" id="sale" type="number" value="${c.sale||''}"></label>
+ <label class="full">Комментарий<textarea class="input" id="note">${esc(c.note)}</textarea></label>
+ <div class="full"><div style="font-size:13px;color:#4b5563">Фотографии</div>
+ <input id="file" type="file" accept="image/*" multiple>
+ <div class="muted" style="margin-top:6px">Нажмите на фото — обложка. Перетаскивайте для порядка.</div>
+ <div class="photos" id="photos"></div></div>
+ <div class="full"><h3 style="margin:5px 0">Объявления</h3>
+ <div class="listingGrid" id="listingEditor"></div>
+ <button type="button" class="btn secondary" onclick="addListingEditor()">+ Площадка</button></div>
+ </div>
+ <div style="margin-top:18px;display:flex;gap:10px;justify-content:flex-end"><button class="btn secondary" onclick="closeModal()">Отмена</button><button class="btn" id="saveCarBtn" onclick="saveCar()">Сохранить</button></div>`;
+ status.value=c.status||'В продаже'; renderPhotos();
+ renderListingEditor(listings);
+ file.onchange=async e=>{
+   const files=[...e.target.files];
+   for(const f of files){
+     if(!f.type.startsWith('image/'))continue;
+     try{photos.push(await compressImage(f,1000,0.62));renderPhotos();}
+     catch(err){console.error(err);alert('Не удалось добавить фото: '+f.name);}
+   }
+   file.value='';
+ };
+ modal.classList.add('open');
+}
+
+async function compressImage(file,maxSize=1600,quality=0.78){
+ return new Promise((resolve,reject)=>{
+   const reader=new FileReader();
+   reader.onerror=reject;
+   reader.onload=()=>{
+     const img=new Image();
+     img.onerror=reject;
+     img.onload=()=>{
+       let w=img.naturalWidth,h=img.naturalHeight;
+       const scale=Math.min(1,maxSize/Math.max(w,h));
+       w=Math.max(1,Math.round(w*scale));
+       h=Math.max(1,Math.round(h*scale));
+       const canvas=document.createElement('canvas');
+       canvas.width=w; canvas.height=h;
+       const ctx=canvas.getContext('2d');
+       ctx.drawImage(img,0,0,w,h);
+       resolve(canvas.toDataURL('image/jpeg',quality));
+     };
+     img.src=reader.result;
+   };
+   reader.readAsDataURL(file);
+ });
+}
+
+function renderPhotos(){
+ photosEl=document.getElementById('photos');
+ if(!photosEl)return;
+ photosEl.innerHTML='';
+ const add=document.createElement('button');
+ add.type='button';
+ add.className='photoAddTile';
+ add.innerHTML='<span class="plus">＋</span><span>Добавить</span>';
+ add.onclick=()=>document.getElementById('file')?.click();
+ photosEl.appendChild(add);
+
+ photos.forEach((p,i)=>{
+   const wrap=document.createElement('div');
+   wrap.className='photoItem';
+   wrap.draggable=true;
+   wrap.dataset.index=i;
+   wrap.title='Перетащите, чтобы изменить порядок';
+   wrap.innerHTML=`<img class="thumb ${i===0?'main':''}" src="${p}" title="Нажмите, чтобы сделать обложкой">
+   ${i===0?'<span class="photoCover">ОБЛОЖКА</span>':''}
+   <button type="button" class="photoDelete">×</button>`;
+   wrap.querySelector('img').onclick=e=>{e.preventDefault();e.stopPropagation();makeMain(i)};
+   wrap.querySelector('.photoDelete').onclick=e=>{e.preventDefault();e.stopPropagation();deletePhoto(i)};
+   wrap.addEventListener('dragstart',e=>{wrap.classList.add('dragging');e.dataTransfer.setData('text/plain',i)});
+   wrap.addEventListener('dragend',()=>wrap.classList.remove('dragging'));
+   wrap.addEventListener('dragover',e=>e.preventDefault());
+   wrap.addEventListener('drop',e=>{
+     e.preventDefault();
+     const from=+e.dataTransfer.getData('text/plain'), to=+wrap.dataset.index;
+     if(Number.isNaN(from)||from===to)return;
+     const item=photos.splice(from,1)[0];
+     photos.splice(to,0,item);
+     renderPhotos();
+   });
+   photosEl.appendChild(wrap);
+ });
+}
+function deletePhoto(i){
+ if(!confirm('Удалить эту фотографию?'))return;
+ photos.splice(i,1);
+ renderPhotos();
+}
+function makeMain(i){photos=[photos[i],...photos.filter((_,x)=>x!==i)];renderPhotos()}
+
+function renderListingEditor(items){
+ const box=document.getElementById('listingEditor'); if(!box)return;
+ box.innerHTML='';
+ (items||[]).forEach((x,i)=>{
+   const d=document.createElement('div');d.className='listing';
+   d.innerHTML=`<label>Площадка<input class="input lsite" value="${esc(x.site||'')}"></label>
+   <label style="display:block;margin-top:6px">Цена<input class="input lprice" type="number" value="${x.price||''}"></label>
+   <label style="display:block;margin-top:6px">Ссылка<input class="input lurl" value="${esc(x.url||'')}"></label>
+   <button type="button" class="btn secondary" style="margin-top:7px" onclick="this.parentElement.remove()">Удалить</button>`;
+   box.appendChild(d);
+ });
+}
+function addListingEditor(){
+ const box=document.getElementById('listingEditor'); if(!box)return;
+ const d=document.createElement('div');d.className='listing';
+ d.innerHTML=`<label>Площадка<input class="input lsite" placeholder="999.md"></label>
+ <label style="display:block;margin-top:6px">Цена<input class="input lprice" type="number"></label>
+ <label style="display:block;margin-top:6px">Ссылка<input class="input lurl" placeholder="https://..."></label>
+ <button type="button" class="btn secondary" style="margin-top:7px" onclick="this.parentElement.remove()">Удалить</button>`;
+ box.appendChild(d);
+}
+function readListings(){
+ return [...document.querySelectorAll('#listingEditor .listing')].map(d=>({
+   site:d.querySelector('.lsite')?.value.trim()||'',
+   price:+(d.querySelector('.lprice')?.value||0),
+   url:d.querySelector('.lurl')?.value.trim()||''
+ })).filter(x=>x.site||x.url||x.price);
+}
+async function saveCar(){
+ const btn=document.getElementById('saveCarBtn');
+ if(btn?.dataset.saving==='1'||cloudBusy)return;
+ cloudBusy=true;if(btn){btn.dataset.saving='1';btn.disabled=true;btn.textContent='Сохраняем…';}
+ try{
+   const c={
+    id:editId||null,brand:brand.value.trim(),model:model.value.trim(),year:+year.value||0,mileage:+mileage.value||0,
+    vin:vin.value.trim(),status:status.value,purchaseDate:purchaseDate.value,ready:ready.value,
+    purchase:+purchase.value||0,sale:+sale.value||0,note:note.value.trim(),photos:[...photos],
+    listings:readListings(),history:[]
+   };
+   if(!c.brand||!c.model){alert('Укажи марку и модель');return;}
+   const id=await saveCarCloud(c);
+   await loadCloud();
+   closeModal();viewCar(id);
+ }catch(err){console.error(err);alert('Не удалось сохранить автомобиль: '+(err.message||err));}
+ finally{cloudBusy=false;if(btn){btn.disabled=false;btn.dataset.saving='';btn.textContent='Сохранить';}}
+}
+let galleryPhotos=[], galleryIndex=0;
+function openLightbox(photos,index=0){
+ galleryPhotos=photos||[]; galleryIndex=Math.max(0,Math.min(index,galleryPhotos.length-1));
+ if(!galleryPhotos.length)return;
+ lightboxImg.src=galleryPhotos[galleryIndex];
+ lbcount.textContent=(galleryIndex+1)+' / '+galleryPhotos.length;
+ lightbox.classList.add('open');
+}
+function closeLightbox(){lightbox.classList.remove('open')}
+function galleryMove(step){
+ if(!galleryPhotos.length)return;
+ galleryIndex=(galleryIndex+step+galleryPhotos.length)%galleryPhotos.length;
+ lightboxImg.src=galleryPhotos[galleryIndex];
+ lbcount.textContent=(galleryIndex+1)+' / '+galleryPhotos.length;
+}
+document.addEventListener('keydown',e=>{
+ if(!lightbox.classList.contains('open'))return;
+ if(e.key==='Escape')closeLightbox();
+ if(e.key==='ArrowLeft')galleryMove(-1);
+ if(e.key==='ArrowRight')galleryMove(1);
+});
+
+
+let galleryCurrent=0;
+let currentCarGalleryId=null;
+function setCarGallery(i){
+ const c=db.cars.find(x=>x.id===currentCarGalleryId);if(!c)return;
+ const pics=c.photos||[];if(!pics.length)return;
+ galleryCurrent=(i+pics.length)%pics.length;
+ const img=document.getElementById('heroMain');
+ if(img)img.src=pics[galleryCurrent];
+ const count=document.getElementById('carGalleryCounter');
+ if(count)count.textContent=(galleryCurrent+1)+' / '+pics.length;
+}
+function carGalleryMove(step){setCarGallery(galleryCurrent+step)}
+
+function viewCar(id){
+ const c=db.cars.find(x=>x.id===id);if(!c)return;
+ const ex=db.expenses.filter(e=>e.carId===id),co=cost(c),pr=(+c.sale||0)-co,age=days(c);
+ const clients=db.clients.filter(cl=>Array.isArray(cl.carIds)&&cl.carIds.map(Number).includes(Number(id)));
+ const listings=Array.isArray(c.listings)?c.listings:[];
+ const pics=Array.isArray(c.photos)?c.photos:[];
+ const first=pics[0]||'';
+ app.innerHTML=`<div class="top"><button class="btn secondary" onclick="page('cars')">← Назад</button>
+ <div class="clientAction"><button class="btn secondary" onclick="openExpense(${id})">+ Расход</button><button class="btn secondary" onclick="addClient(${id})">+ Добавить клиента</button><button class="btn" onclick="openCar(${id})">Редактировать</button></div></div>
+ <div class="detail">
+ <div>
+  <div class="heroGallery">
+   ${first?`<img id="heroMain" src="${first}" onclick="openLightbox(${JSON.stringify(pics)},galleryCurrent)">`:'<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#aaa">Нет фото</div>'}
+   ${pics.length>1?`<button class="galleryArrow left" onclick="event.stopPropagation();carGalleryMove(-1)">‹</button><button class="galleryArrow right" onclick="event.stopPropagation();carGalleryMove(1)">›</button><span class="galleryCounter" id="carGalleryCounter">1 / ${pics.length}</span>`:''}
+  </div>
+  <div class="photos">${pics.map((p,i)=>`<div class="photoItem" style="cursor:pointer" onclick="setCarGallery(${i})"><img class="thumb ${i===0?'main':''}" src="${p}">${i===0?'<span class="photoCover">ОБЛОЖКА</span>':''}</div>`).join('')}</div>
+  <div class="stat" style="margin-top:14px"><h3>📜 История</h3><div class="timeline">
+   ${(c.history||[]).slice().reverse().map(h=>`<div class="timelineItem"><b>${esc(h.date)}</b><div>${esc(h.text)}</div></div>`).join('')||'<div class="muted">История пока пустая.</div>'}
+  </div></div>
+ </div>
+ <div class="info">
+  <div class="detailHeader"><div><h1>${esc(c.brand)} ${esc(c.model)}</h1><div class="price">${euro(c.sale)}</div><div class="muted">${c.year||''} · ${Number(c.mileage||0).toLocaleString()} км</div></div><span class="badge ${c.status==='Продана'?'sold':c.status==='Резерв'?'reserve':''}">${esc(c.status)}</span></div>
+  ${c.status!=='Продана'?`<div class="carMeta"><b class="age ${ageClass(c)}">⏱ ${age} дней</b><span class="profitMini ${pr>=0?'ok':'danger'}">Прибыль ${euro(pr)}</span></div>`:''}
+  <div class="financeBox"><div><small>Покупка</small><b>${euro(c.purchase)}</b></div><div><small>Расходы</small><b>${euro(co-(+c.purchase||0))}</b></div><div><small>Себестоимость</small><b>${euro(co)}</b></div><div><small>Прибыль</small><b class="${pr>=0?'ok':'danger'}">${euro(pr)}</b></div></div>
+  <h3>Характеристики</h3><div class="row"><span>VIN</span><b>${esc(c.vin||'—')}</b></div><div class="row"><span>Дата покупки</span><b>${esc(c.purchaseDate||'—')}</b></div><div class="row"><span>Дата готовности</span><b>${esc(c.ready||'—')}</b></div>
+  <h3>Объявления</h3>${listings.map(x=>`<div class="listing"><b>${esc(x.site||'Площадка')}</b> ${x.price?`· ${euro(x.price)}`:''}${x.url?`<br><a href="${esc(x.url)}" target="_blank" rel="noopener">Открыть ↗</a>`:''}</div>`).join('')||'<div class="muted">Площадки не добавлены.</div>'}
+  <h3>Клиенты (${clients.length})</h3>
+  ${clients.map(cl=>`<div class="row"><span><b>${esc(cl.name)}</b><br><small>${esc(cl.phone||'')} · ${esc(cl.status||'Новый')}</small></span><div><b>${euro(cl.budget)}</b><br><button class="btn secondary" onclick="openClient(${id},${cl.id})">Изменить</button></div></div>`).join('')||'<div class="muted">К этому авто пока нет клиентов.</div>'}
+  <button class="btn secondary" style="margin-top:8px" onclick="openClient(${id},null)">+ Добавить клиента к этому авто</button>
+  <h3>Расходы</h3>${ex.map(e=>`<div class="row"><span>${esc(e.category)}<br><small>${esc(e.date||'')}</small></span><b>${euro(e.amount)}</b></div>`).join('')||'<div class="muted">Расходов нет.</div>'}
+  ${c.note?`<h3>Комментарий</h3><div class="muted" style="white-space:pre-wrap">${esc(c.note)}</div>`:''}
+ </div></div>`;
+ galleryCurrent=0;
+ window.currentCarGalleryId=id;
+}
+function openExpense(carId){
+ modalbox.innerHTML=`<h2>Добавить расход</h2><div class="formgrid"><label>Дата<input class="input" id="edate" type="date" value="${new Date().toISOString().slice(0,10)}"></label><label>Категория<select id="ecat"><option>Доставка</option><option>Таможня</option><option>Ремонт</option><option>Детейлинг</option><option>Документы</option><option>Реклама</option><option>Прочее</option></select></label><label>Сумма<input class="input" id="eamount" type="number"></label><label>Комментарий<input class="input" id="enote"></label></div><div style="margin-top:18px;text-align:right"><button class="btn secondary" onclick="closeModal()">Отмена</button> <button class="btn" onclick="saveExpense(${carId})">Сохранить</button></div>`;
+ modal.classList.add('open');
+}
+async function saveExpense(carId){
+ if(cloudBusy)return;
+ cloudBusy=true;
+ try{
+  await saveExpenseCloud({carId,date:edate.value,category:ecat.value,amount:+eamount.value||0,note:enote.value});
+  await loadCloud();closeModal();viewCar(carId);
+ }catch(err){console.error(err);alert('Не удалось сохранить расход: '+(err.message||err));}
+ finally{cloudBusy=false;}
+}
+function closeModal(){modal.classList.remove('open')}
+
+function openClient(carId=null, clientId=null){
+ const c=clientId?db.clients.find(x=>x.id===clientId):{};
+ const selected=clientId?(c.carIds||[]):(carId?[carId]:[]);
+ modalbox.innerHTML=`<h2>${clientId?'Редактировать клиента':'Новый клиент'}</h2>
+ <div class="clientModalGrid">
+  <label>Имя клиента<input class="input" id="clName" value="${esc(c.name||'')}"></label>
+  <label>Телефон<input class="input" id="clPhone" value="${esc(c.phone||'')}"></label>
+  <label>Бюджет<input class="input" id="clBudget" type="number" value="${c.budget||''}"></label>
+  <label>Статус<select id="clStatus"><option>Новый</option><option>Контакт</option><option>Интересуется</option><option>Просмотр</option><option>Торг</option><option>Продано</option><option>Отказ</option></select></label>
+  <label class="full">Комментарий<textarea class="input" id="clNote">${esc(c.note||'')}</textarea></label>
+  <div class="full"><b>Интересующие автомобили</b><div class="clientCarList">
+   ${db.cars.map(car=>`<label class="clientCarOption"><input type="checkbox" class="clCar" value="${car.id}" ${selected.map(String).includes(String(car.id))?'checked':''}> <span>${esc(car.brand)} ${esc(car.model)} · ${euro(car.sale)}</span></label>`).join('')||'<div class="muted">Автомобилей пока нет.</div>'}
+  </div></div>
+ </div>
+ <div style="margin-top:18px;display:flex;justify-content:flex-end;gap:10px">
+  <button type="button" class="btn secondary" onclick="closeModal()">Отмена</button>
+  <button type="button" class="btn" onclick="saveClient(${clientId||'null'})">Сохранить клиента</button>
+ </div>`;
+ clStatus.value=c.status||'Новый';
+ modal.classList.add('open');
+}
+async function saveClient(clientId=null){
+ if(cloudBusy)return;
+ const name=(document.getElementById('clName')?.value||'').trim();
+ if(!name){alert('Укажите имя клиента');return;}
+ const data={
+  id:clientId||null,name,
+  phone:(document.getElementById('clPhone')?.value||'').trim(),
+  budget:+(document.getElementById('clBudget')?.value||0),
+  status:document.getElementById('clStatus')?.value||'Новый',
+  note:(document.getElementById('clNote')?.value||'').trim(),
+  carIds:[...document.querySelectorAll('.clCar:checked')].map(x=>x.value)
+ };
+ cloudBusy=true;
+ try{const id=await saveClientCloud(data);await loadCloud();closeModal();clients();}
+ catch(err){console.error(err);alert('Не удалось сохранить клиента: '+(err.message||err));}
+ finally{cloudBusy=false;}
+}
+
+function clients(){
+ app.innerHTML=`<div class="top"><h1>Клиенты</h1><button class="btn" onclick="addClient()">+ Новый клиент</button></div>
+ <div class="stat"><table style="width:100%;border-collapse:collapse"><tr><th align=left>Имя</th><th align=left>Телефон</th><th align=left>Бюджет</th><th align=left>Интерес</th><th align=left>Статус</th><th></th></tr>
+ ${db.clients.map(c=>{
+   const cars=(c.carIds||[]).map(id=>db.cars.find(x=>x.id===id)).filter(Boolean);
+   const names=cars.map(x=>x.brand+' '+x.model).join(', ');
+   return `<tr><td style="padding:12px 0"><b>${esc(c.name)}</b>${c.note?`<br><small>${esc(c.note)}</small>`:''}</td><td>${esc(c.phone||'—')}</td><td>${euro(c.budget)}</td><td>${esc(names||'—')}</td><td>${esc(c.status||'Новый')}</td><td><button class="btn secondary" onclick="openClient(null,${c.id})">Изменить</button></td></tr>`;
+ }).join('')||'<tr><td colspan=6 class="empty">Клиентов пока нет.</td></tr>'}</table></div>`;
+}
+function addClient(carId=null){ openClient(carId,null); }
+function deals(){
+ app.innerHTML=`<div class="top"><h1>Сделки</h1></div><div class="cars">${['Переговоры','Резерв','Предоплата','Продано'].map(s=>`<div class="stat"><h3>${s}</h3>${db.deals.filter(d=>d.status===s).map(d=>{let c=db.cars.find(x=>x.id===d.carId),cl=db.clients.find(x=>x.id===d.clientId);return `<div class="row"><span>${esc(cl?.name||'Клиент')}<br>${esc(c?.brand||'')} ${esc(c?.model||'')}</span><b>${euro(d.price)}</b></div>`}).join('')||'<div class="muted">Нет сделок</div>'}</div>`).join('')}</div>`;
+}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>page(b.dataset.page));
+modal.onclick=e=>{if(e.target===modal)closeModal()};
+
+db.cars.forEach(c=>{
+ if(!Array.isArray(c.listings))c.listings=[];
+ if(!Array.isArray(c.history))c.history=[];
+ if(!Array.isArray(c.photos))c.photos=[];
+});
+initCloud();
+</script>
+<div id="cloudStatus" style="position:fixed;right:12px;bottom:12px;background:#166534;color:#fff;padding:7px 10px;border-radius:999px;font-size:11px;z-index:50">☁ Supabase</div></body></html>
