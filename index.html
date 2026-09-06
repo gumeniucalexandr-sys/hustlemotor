@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>HUSTLE MOTORS CRM v7.5</title>
+<title>HUSTLE MOTORS CRM v7.10</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f5f6f8;color:#17202a}
 .app{display:flex;min-height:100vh}.side{width:230px;background:#111827;color:#fff;padding:22px 14px;position:fixed;inset:0 auto 0 0}
 .logo{font-size:20px;font-weight:800;padding:8px 12px 28px}.nav button{width:100%;border:0;background:transparent;color:#cbd5e1;text-align:left;padding:12px;border-radius:9px;margin:3px 0;cursor:pointer;font-size:14px}.nav button.active,.nav button:hover{background:#253044;color:#fff}
-.main{margin-left:230px;width:calc(100% - 230px);padding:28px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}h1{margin:0;font-size:26px}.btn{border:0;border-radius:9px;padding:11px 16px;background:#1f4e78;color:white;cursor:pointer;font-weight:700}.btn.secondary{background:#e5e7eb;color:#111827}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.stat{background:white;border-radius:14px;padding:18px;box-shadow:0 1px 3px #00000012}.stat b{display:block;font-size:24px;margin-top:8px}.toolbar{display:flex;gap:10px;margin:16px 0}.input,select{padding:11px;border:1px solid #d5dae1;border-radius:9px;background:#fff}.toolbar .input{flex:1}
+.main{margin-left:230px;width:calc(100% - 230px);padding:28px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}h1{margin:0;font-size:26px}.btn{border:0;border-radius:9px;padding:11px 16px;background:#1f4e78;color:white;cursor:pointer;font-weight:700}.dangerBtn{background:#b91c1c!important;color:#fff!important}.dangerBtn:hover{background:#991b1b!important}.btn.secondary{background:#e5e7eb;color:#111827}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.stat{background:white;border-radius:14px;padding:18px;box-shadow:0 1px 3px #00000012}.stat b{display:block;font-size:24px;margin-top:8px}.toolbar{display:flex;gap:10px;margin:16px 0}.input,select{padding:11px;border:1px solid #d5dae1;border-radius:9px;background:#fff}.toolbar .input{flex:1}
 .cars{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}.card{background:#fff;border-radius:15px;overflow:hidden;box-shadow:0 2px 8px #00000010;cursor:pointer}.photo{height:180px;background:#e5e7eb;display:flex;align-items:center;justify-content:center;color:#6b7280}.photo img{width:100%;height:100%;object-fit:cover}.cardbody{padding:15px}.price{font-size:20px;font-weight:800;margin:7px 0}.muted{color:#6b7280;font-size:13px}.badge{display:inline-block;padding:5px 8px;border-radius:99px;background:#dcfce7;color:#166534;font-size:12px;margin-top:8px}.badge.reserve{background:#fef3c7;color:#92400e}.badge.sold{background:#e5e7eb;color:#374151}
 .modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}.modalbox{background:#fff;border-radius:16px;max-width:900px;width:100%;max-height:92vh;overflow:auto;padding:24px}.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.formgrid label{font-size:13px;color:#4b5563}.formgrid input,.formgrid select,.formgrid textarea{width:100%;margin-top:5px}.full{grid-column:1/-1}.photos{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.thumb{width:110px;height:82px;min-width:110px;min-height:82px;max-width:110px;max-height:82px;object-fit:cover;border-radius:8px;border:2px solid transparent;cursor:pointer;display:block;box-sizing:border-box}.photoItem>.thumb{position:absolute;inset:0;width:100%;height:100%;min-width:0;min-height:0;max-width:none;max-height:none;object-fit:cover;margin:0;z-index:1}.photoItem{position:relative;display:block;width:110px;height:82px;margin:3px;cursor:grab;flex:0 0 110px;overflow:hidden;border-radius:8px}.photoItem.dragging{opacity:.45}.photoDelete{position:absolute;right:5px;top:5px;border:0;background:#000b;color:#fff;width:25px;height:25px;border-radius:50%;cursor:pointer;font-size:16px;line-height:22px}.photoCover{position:absolute;left:5px;bottom:5px;background:#1f4e78;color:#fff;border-radius:6px;padding:3px 6px;font-size:10px;line-height:1;pointer-events:none;z-index:2}.photoHint{margin-top:7px;color:#6b7280;font-size:12px}.thumb.main{border-color:#1f4e78}.photoItem img.thumb{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;display:block!important;object-fit:cover!important;object-position:center!important}.photoItem.selected{border:2px solid #1f4e78}.photoItem.selected img.thumb{border-color:transparent}
 .lightbox{position:fixed;inset:0;background:#000d;display:none;align-items:center;justify-content:center;z-index:20;padding:30px}.lightbox.open{display:flex}.lightbox img{max-width:90vw;max-height:82vh;object-fit:contain;border-radius:10px}.lbbtn{position:absolute;border:0;background:#ffffff22;color:white;font-size:34px;width:48px;height:48px;border-radius:50%;cursor:pointer}.lbclose{right:24px;top:18px}.lbprev{left:24px;top:50%;transform:translateY(-50%)}.lbnext{right:24px;top:50%;transform:translateY(-50%)}.lbcount{position:absolute;bottom:20px;color:white;font-size:14px}
@@ -98,7 +98,7 @@
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body data-build="v7.5">
+<body data-build="v7.10">
 <div class="app">
 <aside class="side"><div class="logo">HUSTLE MOTORS</div><div class="nav">
 <button data-page="dashboard">📊 Dashboard</button><button data-page="cars">🚗 Автомобили</button><button data-page="clients">👤 Клиенты</button><button data-page="deals">🤝 Сделки</button>
@@ -134,7 +134,7 @@ db.cars.forEach(c=>{
 });
 let photos=[]; let editId=null;
 
-// HUSTLE MOTORS v7.8 — Supabase is an optional cloud layer. Local CRM never waits for cloud.
+// HUSTLE MOTORS v7.9 — Supabase is an optional cloud layer. Local CRM never waits for cloud.
 const SUPABASE_URL='https://jpzoghmpfdhyzisjtpza.supabase.co';
 const SUPABASE_KEY='sb_publishable_70e1x7fKJowSMUpp_vhcvQ_dHW8yvAj';
 let hmCloudClient=null, cloudReady=false, cloudBusy=false;
@@ -201,7 +201,7 @@ async function cloudUpsertCar(c){
  const payload={brand:c.brand,model:c.model,year:c.year||null,mileage:c.mileage||null,vin:c.vin||null,status:c.status,purchase_date:c.purchaseDate||null,ready_date:c.ready||null,purchase_price:c.purchase||0,sale_price:c.sale||0,note:c.note||null};
  let row;
  if(c.cloudId){const r=await hmCloudClient.from('cars').update(payload).eq('id',c.cloudId).select().single();if(r.error)throw Object.assign(r.error,{_crmStep:'cars UPDATE'});row=r.data;}
- else {const r=await hmCloudClient.from('cars').insert(payload).select().single();if(r.error)throw Object.assign(r.error,{_crmStep:'cars INSERT'});row=r.data;c.cloudId=row.id;}
+ else {const r=await hmCloudClient.from('cars').insert(payload).select().single();if(r.error)throw Object.assign(r.error,{_crmStep:'cars INSERT'});row=r.data;c.cloudId=row.id;try{localStorage.setItem(KEY,JSON.stringify(db));}catch(_){} }
  // Replace listings. Check every request so sync can identify the exact failing table.
  {const r=await hmCloudClient.from('car_listings').delete().eq('car_id',c.cloudId);if(r.error)throw Object.assign(r.error,{_crmStep:'car_listings DELETE'});}
  if(c.listings?.length){const r=await hmCloudClient.from('car_listings').insert(c.listings.map(x=>({car_id:c.cloudId,platform:x.site,price:x.price||null,url:x.url||null})));if(r.error)throw Object.assign(r.error,{_crmStep:'car_listings INSERT'});}
@@ -218,6 +218,40 @@ async function cloudUpsertCar(c){
  // Append current history to cloud when not already represented is intentionally omitted here; status/price changes are saved locally and can be pushed by sync later.
  return row;
 }
+async function cloudDeleteCar(c){
+  if(!cloudReady || !hmCloudClient || !c?.cloudId) return;
+  const carId=c.cloudId;
+  // Remove files from Storage first; if Storage cleanup is blocked, continue with DB cleanup
+  // so deleting the car never leaves the database record behind.
+  try{
+    const ph=await hmCloudClient.from('car_photos').select('storage_path').eq('car_id',carId);
+    if(!ph.error){
+      const paths=(ph.data||[]).map(x=>x.storage_path).filter(Boolean).map(x=>{
+        const m=String(x).match(/car-photos\/(.+)$/); return m?m[1]:x;
+      });
+      if(paths.length){
+        const sr=await hmCloudClient.storage.from('car-photos').remove(paths);
+        if(sr.error) console.warn('Storage cleanup failed:',sr.error);
+      }
+    }
+  }catch(e){ console.warn('Storage cleanup skipped:',e); }
+
+  const steps=[
+    ['car_listings','DELETE'],
+    ['car_photos','DELETE'],
+    ['car_expenses','DELETE'],
+    ['car_history','DELETE'],
+    ['tasks','DELETE']
+  ];
+  for(const [table,op] of steps){
+    const r=await hmCloudClient.from(table).delete().eq('car_id',carId);
+    if(r.error) throw Object.assign(r.error,{_crmStep:`${table} ${op}`});
+  }
+  // client_cars has a foreign key with ON DELETE CASCADE.
+  const cr=await hmCloudClient.from('cars').delete().eq('id',carId);
+  if(cr.error) throw Object.assign(cr.error,{_crmStep:'cars DELETE'});
+}
+
 async function cloudUpsertClient(cl){
  if(!cloudReady)return;
  const payload={name:cl.name,phone:cl.phone||null,email:cl.email||null,budget:cl.budget||null,status:cl.status||'Новый',note:cl.note||null};
@@ -233,7 +267,7 @@ async function cloudSync(){
  cloudBusy=true;setCloudStatus('☁️ Синхронизация…','warn');
  let step='';
  try{
-  for(const c of db.cars){step=`Авто ${c.brand||''} ${c.model||''} → cars`;try{await cloudUpsertCar(c);}catch(e){throw Object.assign(e,{_crmStep:e._crmStep||step});}}
+  for(const c of db.cars){step=`Авто ${c.brand||''} ${c.model||''} → cars`;try{await cloudUpsertCar(c);try{localStorage.setItem(KEY,JSON.stringify(db));}catch(_){} }catch(e){throw Object.assign(e,{_crmStep:e._crmStep||step});}}
   for(const e of db.expenses){const c=db.cars.find(x=>x.id==e.carId);if(!c?.cloudId)continue;step='car_expenses '+(e.cloudId?'UPDATE':'INSERT');const payload={car_id:c.cloudId,category:e.category,amount:e.amount||0,expense_date:e.date||null,note:e.note||null}; if(e.cloudId){const r=await hmCloudClient.from('car_expenses').update(payload).eq('id',e.cloudId);if(r.error)throw Object.assign(r.error,{_crmStep:step});}else{const r=await hmCloudClient.from('car_expenses').insert(payload).select().single();if(r.error)throw Object.assign(r.error,{_crmStep:step});e.cloudId=r.data.id;}}
   for(const cl of db.clients){step=`clients ${cl.name||''}`;try{await cloudUpsertClient(cl);}catch(e){throw Object.assign(e,{_crmStep:e._crmStep||step});}}
   try{localStorage.setItem(KEY,JSON.stringify(db));}catch(e){}
@@ -270,7 +304,7 @@ function dashboard(){
  const profit=sold.reduce((s,c)=>s+(+c.sale||0)-cost(c),0);
  const avgDays=active.length?Math.round(active.reduce((s,c)=>s+days(c),0)/active.length):0;
  const attention=active.filter(c=>days(c)>60).sort((a,b)=>days(b)-days(a)).slice(0,8);
- app.innerHTML=`<div class="top"><h1>Dashboard</h1><div class="cloudBar"><span id="cloudStatus" class="cloudStatus">☁️ v7.8 · запуск…</span><button class="btn secondary" onclick="cloudSync()">↻ Синхронизировать</button><button class="btn" onclick="openCar()">+ Добавить авто</button></div></div>
+ app.innerHTML=`<div class="top"><h1>Dashboard</h1><div class="cloudBar"><span id="cloudStatus" class="cloudStatus">☁️ v7.10 · запуск…</span><button class="btn secondary" onclick="cloudSync()">↻ Синхронизировать</button><button class="btn" onclick="openCar()">+ Добавить авто</button></div></div>
  <div class="statGrid">
   <div class="kpi"><div class="label">🚗 В наличии</div><div class="value">${active.length}</div></div>
   <div class="kpi"><div class="label">💰 Вложено</div><div class="value">${euro(invested)}</div></div>
@@ -561,7 +595,7 @@ function viewCar(id){
  currentCarGalleryId=id;
  galleryCurrent=0;
  app.innerHTML=`<div class="top"><button class="btn secondary" onclick="page('cars')">← Назад</button>
- <div class="clientAction"><button class="btn secondary" onclick="openExpense(${id})">+ Расход</button><button class="btn secondary" onclick="addClient(${id})">+ Добавить клиента</button><button class="btn" onclick="openCar(${id})">Редактировать</button></div></div>
+ <div class="clientAction"><button class="btn secondary" onclick="openExpense(${id})">+ Расход</button><button class="btn secondary" onclick="addClient(${id})">+ Добавить клиента</button><button class="btn" onclick="openCar(${id})">Редактировать</button><button class="btn dangerBtn" onclick="deleteCar(${id})">Удалить авто</button></div></div>
  <div class="detail">
  <div>
   <div class="heroGallery">
@@ -586,6 +620,41 @@ function viewCar(id){
   ${c.note?`<h3>Комментарий</h3><div class="muted" style="white-space:pre-wrap">${esc(c.note)}</div>`:''}
  </div></div>`;
 }
+async function deleteCar(id){
+ const c=db.cars.find(x=>x.id===id);
+ if(!c)return;
+ const title=`${c.brand||''} ${c.model||''}`.trim()||'этот автомобиль';
+ const ok=confirm(`Удалить автомобиль «${title}»?\\n\\nБудут удалены его расходы, объявления, история и фотографии.\\n\\nЭто действие нельзя отменить.`);
+ if(!ok)return;
+ const btns=[...document.querySelectorAll('button')];
+ const btn=btns.find(b=>b.classList.contains('dangerBtn'));
+ if(btn){btn.disabled=true;btn.textContent='Удаляем…';}
+ try{
+   if(cloudReady && c.cloudId){
+     try{
+       await cloudDeleteCar(c);
+     }catch(err){
+       console.error('deleteCar cloud',err);
+       alert('Автомобиль не удалён из облака.\\n\\nШаг: '+(err._crmStep||'неизвестно')+'\\nОшибка: '+(err.message||err));
+       return;
+     }
+   }
+   db.cars=db.cars.filter(x=>x.id!==id);
+   db.expenses=db.expenses.filter(x=>x.carId!==id);
+   db.clients.forEach(cl=>{if(Array.isArray(cl.carIds))cl.carIds=cl.carIds.filter(x=>String(x)!==String(id));});
+   db.deals=db.deals.filter(d=>String(d.carId)!==String(id));
+   save();
+   closeModal();
+   page('cars');
+   setCloudStatus(cloudReady?'☁️ Авто удалено из облака':'☁️ Авто удалено локально','ok');
+ }catch(err){
+   console.error(err);
+   alert('Не удалось удалить автомобиль.');
+ }finally{
+   if(btn){btn.disabled=false;btn.textContent='Удалить авто';}
+ }
+}
+
 function openExpense(carId){
  modalbox.innerHTML=`<h2>Добавить расход</h2><div class="formgrid"><label>Дата<input class="input" id="edate" type="date" value="${new Date().toISOString().slice(0,10)}"></label><label>Категория<select id="ecat"><option>Доставка</option><option>Таможня</option><option>Ремонт</option><option>Детейлинг</option><option>Документы</option><option>Реклама</option><option>Прочее</option></select></label><label>Сумма<input class="input" id="eamount" type="number"></label><label>Комментарий<input class="input" id="enote"></label></div><div style="margin-top:18px;text-align:right"><button class="btn secondary" onclick="closeModal()">Отмена</button> <button class="btn" onclick="saveExpense(${carId})">Сохранить</button></div>`;
  modal.classList.add('open');
