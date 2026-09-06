@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>HUSTLE MOTORS CRM v7.15</title>
+<title>HUSTLE MOTORS CRM v7.16</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f5f6f8;color:#17202a}
 .app{display:flex;min-height:100vh}.side{width:230px;background:#111827;color:#fff;padding:22px 14px;position:fixed;inset:0 auto 0 0}
@@ -13,7 +13,7 @@
 .modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:20px;z-index:100}.modal.open{display:flex}.modalbox{background:#fff;border-radius:16px;max-width:900px;width:100%;max-height:92vh;overflow:auto;padding:24px}.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.formgrid label{font-size:13px;color:#4b5563}.formgrid input,.formgrid select,.formgrid textarea{width:100%;margin-top:5px}.full{grid-column:1/-1}.photos{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.thumb{width:110px;height:82px;min-width:110px;min-height:82px;max-width:110px;max-height:82px;object-fit:cover;border-radius:8px;border:2px solid transparent;cursor:pointer;display:block;box-sizing:border-box}.photoItem>.thumb{position:absolute;inset:0;width:100%;height:100%;min-width:0;min-height:0;max-width:none;max-height:none;object-fit:cover;margin:0;z-index:1}.photoItem{position:relative;display:block;width:110px;height:82px;margin:3px;cursor:grab;flex:0 0 110px;overflow:hidden;border-radius:8px}.photoItem.dragging{opacity:.45}.photoDelete{position:absolute;right:5px;top:5px;border:0;background:#000b;color:#fff;width:25px;height:25px;border-radius:50%;cursor:pointer;font-size:16px;line-height:22px}.photoCover{position:absolute;left:5px;bottom:5px;background:#1f4e78;color:#fff;border-radius:6px;padding:3px 6px;font-size:10px;line-height:1;pointer-events:none;z-index:2}.photoHint{margin-top:7px;color:#6b7280;font-size:12px}.thumb.main{border-color:#1f4e78}.photoItem img.thumb{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;display:block!important;object-fit:cover!important;object-position:center!important}.photoItem.selected{border:2px solid #1f4e78}.photoItem.selected img.thumb{border-color:transparent}
 .lightbox{position:fixed;inset:0;background:#000d;display:none;align-items:center;justify-content:center;z-index:20;padding:30px}.lightbox.open{display:flex}.lightbox img{max-width:90vw;max-height:82vh;object-fit:contain;border-radius:10px}.lbbtn{position:absolute;border:0;background:#ffffff22;color:white;font-size:34px;width:48px;height:48px;border-radius:50%;cursor:pointer}.lbclose{right:24px;top:18px}.lbprev{left:24px;top:50%;transform:translateY(-50%)}.lbnext{right:24px;top:50%;transform:translateY(-50%)}.lbcount{position:absolute;bottom:20px;color:white;font-size:14px}
 .detail{display:grid;grid-template-columns:1.25fr 1fr;gap:22px}.hero{width:100%;height:330px;object-fit:cover;border-radius:14px;background:#eee}.info{background:#fff;border-radius:14px;padding:20px}.row{display:flex;justify-content:space-between;border-bottom:1px solid #eee;padding:9px 0}.danger{color:#b91c1c}.ok{color:#166534}.empty{padding:50px;text-align:center;color:#6b7280;background:#fff;border-radius:14px}
-@media(max-width:800px){.side{width:70px}.logo{font-size:0}.logo:after{content:"A";font-size:22px}.nav button{font-size:0;text-align:center}.nav button:before{font-size:18px}.main{margin-left:70px;width:calc(100% - 70px);padding:16px}.grid{grid-template-columns:repeat(2,1fr)}.detail{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}}
+@media(max-width:800px){.side{width:100%;height:62px;background:#111827;padding:4px 6px;inset:auto 0 0 0;z-index:200;display:flex;align-items:center}.logo{display:none}.nav{display:flex;width:100%;gap:4px}.nav button{font-size:11px;text-align:center;padding:8px 4px;margin:0;flex:1;white-space:nowrap}.main{margin-left:0;margin-bottom:62px;width:100%;padding:12px}.grid{grid-template-columns:1fr}.cars{grid-template-columns:1fr;gap:12px}.card .photo{height:210px}.detail{grid-template-columns:1fr;gap:12px}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}.top{gap:8px;align-items:flex-start;flex-wrap:wrap}.top h1{font-size:22px}.clientAction{width:100%;gap:6px}.clientAction .btn{flex:1;min-width:0;padding:10px 8px;font-size:12px}.modal{padding:8px;align-items:flex-end}.modalbox{max-height:96vh;border-radius:16px 16px 0 0;padding:14px}.heroGallery{min-height:220px;aspect-ratio:4/3}.galleryArrow{width:40px;height:40px;font-size:24px}.photos{gap:5px}.photoItem,.photoAddTile{width:84px;height:64px;min-width:84px;flex-basis:84px}.photoAddTile{font-size:10px}.thumb{width:84px;height:64px;min-width:84px;min-height:64px}.financeBox{grid-template-columns:repeat(2,1fr)}.listingGrid{grid-template-columns:1fr}.info{padding:14px}.detailHeader{flex-direction:column;gap:4px}.detailHeader .badge{align-self:flex-start}}
 
 .photoAddTile{
   width:110px;height:82px;box-sizing:border-box;
@@ -98,7 +98,7 @@
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body data-build="v7.15">
+<body data-build="v7.16">
 <div class="app">
 <aside class="side"><div class="logo">HUSTLE MOTORS</div><div class="nav">
 <button data-page="dashboard">📊 Dashboard</button><button data-page="cars">🚗 Автомобили</button><button data-page="clients">👤 Клиенты</button><button data-page="deals">🤝 Сделки</button>
@@ -620,7 +620,7 @@ function viewCar(id){
  currentCarGalleryId=id;
  galleryCurrent=0;
  app.innerHTML=`<div class="top"><button class="btn secondary" onclick="page('cars')">← Назад</button>
- <div class="clientAction"><button class="btn secondary" onclick="openExpense(${id})">+ Расход</button><button class="btn secondary" onclick="addClient(${id})">+ Добавить клиента</button><button class="btn" onclick="openCar(${id})">Редактировать</button><button class="btn dangerBtn" onclick="deleteCar(${id})">Удалить авто</button></div></div>
+ <div class="clientAction"><button class="btn secondary" onclick="openExpense(${id})">+ Расход</button><button class="btn secondary" onclick="addClient(${id})">+ Добавить клиента</button><button class="btn" onclick="openCar(${id})">Редактировать</button>${c.status!=='Продана'?`<button class="btn" style="background:#166534" onclick="markCarSold(${id})">✓ Продать авто</button>`:''}<button class="btn dangerBtn" onclick="deleteCar(${id})">Удалить авто</button></div></div>
  <div class="detail">
  <div>
   <div class="heroGallery">
@@ -644,6 +644,26 @@ function viewCar(id){
   <h3>Расходы</h3>${ex.map(e=>`<div class="row"><span>${esc(e.category)}<br><small>${esc(e.date||'')}</small></span><b>${euro(e.amount)}</b></div>`).join('')||'<div class="muted">Расходов нет.</div>'}
   ${c.note?`<h3>Комментарий</h3><div class="muted" style="white-space:pre-wrap">${esc(c.note)}</div>`:''}
  </div></div>`;
+}
+async function markCarSold(id){
+ const c=db.cars.find(x=>x.id===id);
+ if(!c)return;
+ const title=`${c.brand||''} ${c.model||''}`.trim()||'этот автомобиль';
+ const price=prompt(`Цена продажи для «${title}»`, String(c.sale||''));
+ if(price===null)return;
+ const sale=Number(String(price).replace(/[^0-9.,-]/g,'').replace(',','.'));
+ if(!Number.isFinite(sale)||sale<0){alert('Укажи корректную цену продажи.');return;}
+ const oldStatus=c.status||'В продаже';
+ c.sale=sale; c.status='Продана';
+ c.history=Array.isArray(c.history)?c.history:[];
+ c.history.push({date:new Date().toISOString().slice(0,10),text:`Автомобиль продан · ${euro(sale)}`});
+ const idx=db.cars.findIndex(x=>x.id===id); if(idx>=0)db.cars[idx]=c;
+ save(); renderDetail(id);
+ setCloudStatus(cloudReady?'☁️ Продажа сохраняется…':'☁️ Продано локально',cloudReady?'warn':'ok');
+ if(cloudReady){
+   try{await cloudUpsertCar(c);try{localStorage.setItem(KEY,JSON.stringify(db));}catch(_){};setCloudStatus('☁️ Авто отмечено как проданное','ok');}
+   catch(e){console.error(e);setCloudStatus('☁️ Продано локально · облако недоступно','warn');}
+ }
 }
 async function deleteCar(id){
  const c=db.cars.find(x=>x.id===id);
