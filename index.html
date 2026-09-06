@@ -98,7 +98,7 @@
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body data-build="v7.13">
+<body data-build="v7.14">
 <div class="app">
 <aside class="side"><div class="logo">HUSTLE MOTORS</div><div class="nav">
 <button data-page="dashboard">📊 Dashboard</button><button data-page="cars">🚗 Автомобили</button><button data-page="clients">👤 Клиенты</button><button data-page="deals">🤝 Сделки</button>
@@ -134,7 +134,7 @@ db.cars.forEach(c=>{
 });
 let photos=[]; let editId=null;
 
-// HUSTLE MOTORS v7.13 — Supabase is the source of truth; localStorage is only a temporary/offline cache.
+// HUSTLE MOTORS v7.14 — Supabase is the source of truth; localStorage is only a temporary/offline cache.
 const SUPABASE_URL='https://jpzoghmpfdhyzisjtpza.supabase.co';
 const SUPABASE_KEY='sb_publishable_70e1x7fKJowSMUpp_vhcvQ_dHW8yvAj';
 let hmCloudClient=null, cloudReady=false, cloudBusy=false;
@@ -210,14 +210,16 @@ async function cloudUpsertCar(c){
  if(existing.error)throw Object.assign(existing.error,{_crmStep:'car_photos SELECT'});
  const existingPaths=new Set((existing.data||[]).map(x=>x.storage_path));
  const photoRows=[];
- for(let i=0;i<(c.photos||[]).length;i++){
-   let path=c.photos[i];
+ const photoJobs=(c.photos||[]).map(async (raw,i)=>{
+   let path=raw;
    if(path.startsWith('data:')) {
-     try{path=await uploadPhotoData(c.cloudId,c.photos[i],i);}
+     try{path=await uploadPhotoData(c.cloudId,raw,i);}
      catch(e){throw Object.assign(e,{_crmStep:'Storage car-photos UPLOAD'});}
    } else { const m=path.match(/car-photos\/([^?]+)(?:\?.*)?$/); if(m)path=m[1]; }
-   photoRows.push({car_id:c.cloudId,storage_path:path,sort_order:i,is_cover:i===0});
- }
+   return {car_id:c.cloudId,storage_path:path,sort_order:i,is_cover:i===0};
+ });
+ try{photoRows.push(...await Promise.all(photoJobs));}
+ catch(e){throw e;}
  // Remove DB rows that are no longer present, then upsert the current ordered set.
  const wanted=new Set(photoRows.map(x=>x.storage_path));
  const stale=(existing.data||[]).filter(x=>!wanted.has(x.storage_path)).map(x=>x.id);
@@ -548,9 +550,16 @@ async function saveCar(){
      }
      alert('Автомобиль сохранён, но фотографии не поместились в память браузера. Добавь меньше/меньше фото после очистки старых данных.');
    }
-   try{await cloudUpsertCar(c);setCloudStatus('☁️ Авто сохранено в облако','ok');}catch(cloudErrObj){console.error(cloudErrObj);setCloudStatus('☁️ Сохранено локально · облако недоступно','warn');}
-   try{localStorage.setItem(KEY,JSON.stringify(db));}catch(e){}
+   // Close the editor immediately after local save; cloud sync continues in background.
    closeModal();page('cars');
+   setCloudStatus('☁️ Сохранение в облако…','warn');
+   cloudUpsertCar(c).then(()=>{
+     try{localStorage.setItem(KEY,JSON.stringify(db));}catch(e){}
+     setCloudStatus('☁️ Авто сохранено в облако','ok');
+   }).catch(cloudErrObj=>{
+     console.error(cloudErrObj);
+     setCloudStatus('☁️ Сохранено локально · облако недоступно','warn');
+   });
  }catch(err){
    console.error(err);
    alert('Не удалось сохранить автомобиль. В браузере закончилась память CRM. Попробуй удалить старые фотографии.');
