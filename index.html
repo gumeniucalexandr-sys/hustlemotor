@@ -98,7 +98,7 @@
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body data-build="v7.11">
+<body data-build="v7.13">
 <div class="app">
 <aside class="side"><div class="logo">HUSTLE MOTORS</div><div class="nav">
 <button data-page="dashboard">📊 Dashboard</button><button data-page="cars">🚗 Автомобили</button><button data-page="clients">👤 Клиенты</button><button data-page="deals">🤝 Сделки</button>
@@ -134,7 +134,7 @@ db.cars.forEach(c=>{
 });
 let photos=[]; let editId=null;
 
-// HUSTLE MOTORS v7.12 — Supabase is an optional cloud layer. Local CRM never waits for cloud.
+// HUSTLE MOTORS v7.13 — Supabase is the source of truth; localStorage is only a temporary/offline cache.
 const SUPABASE_URL='https://jpzoghmpfdhyzisjtpza.supabase.co';
 const SUPABASE_KEY='sb_publishable_70e1x7fKJowSMUpp_vhcvQ_dHW8yvAj';
 let hmCloudClient=null, cloudReady=false, cloudBusy=false;
@@ -205,16 +205,31 @@ async function cloudUpsertCar(c){
  // Replace listings. Check every request so sync can identify the exact failing table.
  {const r=await hmCloudClient.from('car_listings').delete().eq('car_id',c.cloudId);if(r.error)throw Object.assign(r.error,{_crmStep:'car_listings DELETE'});}
  if(c.listings?.length){const r=await hmCloudClient.from('car_listings').insert(c.listings.map(x=>({car_id:c.cloudId,platform:x.site,price:x.price||null,url:x.url||null})));if(r.error)throw Object.assign(r.error,{_crmStep:'car_listings INSERT'});}
- // Photos: upload current data URLs and rebuild photo rows. Existing public URLs are retained.
- {const r=await hmCloudClient.from('car_photos').delete().eq('car_id',c.cloudId);if(r.error)throw Object.assign(r.error,{_crmStep:'car_photos DELETE'});}
+ // Photos: keep existing cloud rows and upload only new data URLs. This makes repeat saves fast.
+ const existing=await hmCloudClient.from('car_photos').select('id,storage_path,sort_order,is_cover').eq('car_id',c.cloudId).order('sort_order',{ascending:true});
+ if(existing.error)throw Object.assign(existing.error,{_crmStep:'car_photos SELECT'});
+ const existingPaths=new Set((existing.data||[]).map(x=>x.storage_path));
  const photoRows=[];
  for(let i=0;i<(c.photos||[]).length;i++){
    let path=c.photos[i];
-   if(path.startsWith('data:')) {try{path=await uploadPhotoData(c.cloudId,c.photos[i],i);}catch(e){throw Object.assign(e,{_crmStep:'Storage car-photos UPLOAD'});}}
-   else { const m=path.match(/car-photos\/([^?]+)(?:\?.*)?$/); if(m)path=m[1]; }
+   if(path.startsWith('data:')) {
+     try{path=await uploadPhotoData(c.cloudId,c.photos[i],i);}
+     catch(e){throw Object.assign(e,{_crmStep:'Storage car-photos UPLOAD'});}
+   } else { const m=path.match(/car-photos\/([^?]+)(?:\?.*)?$/); if(m)path=m[1]; }
    photoRows.push({car_id:c.cloudId,storage_path:path,sort_order:i,is_cover:i===0});
  }
- if(photoRows.length){const r=await hmCloudClient.from('car_photos').insert(photoRows);if(r.error)throw Object.assign(r.error,{_crmStep:'car_photos INSERT'});}
+ // Remove DB rows that are no longer present, then upsert the current ordered set.
+ const wanted=new Set(photoRows.map(x=>x.storage_path));
+ const stale=(existing.data||[]).filter(x=>!wanted.has(x.storage_path)).map(x=>x.id);
+ if(stale.length){const r=await hmCloudClient.from('car_photos').delete().in('id',stale);if(r.error)throw Object.assign(r.error,{_crmStep:'car_photos DELETE'});}
+ if(photoRows.length){
+   const r=await hmCloudClient.from('car_photos').upsert(photoRows,{onConflict:'car_id,storage_path'});
+   if(r.error){
+     // Fallback for schemas without a unique constraint on (car_id, storage_path): insert only new paths.
+     const fresh=photoRows.filter(x=>!existingPaths.has(x.storage_path));
+     if(fresh.length){const rr=await hmCloudClient.from('car_photos').insert(fresh);if(rr.error)throw Object.assign(rr.error,{_crmStep:'car_photos INSERT'});}
+   }
+ }
  // Append current history to cloud when not already represented is intentionally omitted here; status/price changes are saved locally and can be pushed by sync later.
  return row;
 }
@@ -304,7 +319,7 @@ function dashboard(){
  const profit=sold.reduce((s,c)=>s+(+c.sale||0)-cost(c),0);
  const avgDays=active.length?Math.round(active.reduce((s,c)=>s+days(c),0)/active.length):0;
  const attention=active.filter(c=>days(c)>60).sort((a,b)=>days(b)-days(a)).slice(0,8);
- app.innerHTML=`<div class="top"><h1>Dashboard</h1><div class="cloudBar"><span id="cloudStatus" class="cloudStatus">☁️ v7.11 · запуск…</span><button class="btn secondary" onclick="cloudSync()">↻ Синхронизировать</button><button class="btn" onclick="openCar()">+ Добавить авто</button></div></div>
+ app.innerHTML=`<div class="top"><h1>Dashboard</h1><div class="cloudBar"><span id="cloudStatus" class="cloudStatus">☁️ v7.13 · запуск…</span><button class="btn secondary" onclick="cloudSync()">↻ Синхронизировать</button><button class="btn" onclick="openCar()">+ Добавить авто</button></div></div>
  <div class="statGrid">
   <div class="kpi"><div class="label">🚗 В наличии</div><div class="value">${active.length}</div></div>
   <div class="kpi"><div class="label">💰 Вложено</div><div class="value">${euro(invested)}</div></div>
@@ -729,14 +744,12 @@ page('dashboard');
 cloudInit();
 setTimeout(async()=>{
   if(!cloudReady)return;
-  const hadLocal=db.cars.length||db.clients.length||db.expenses.length;
-  if(hadLocal){
-    setCloudStatus('☁️ Локальные данные · облако проверяется…','warn');
-    cloudPing();
-  }else{
-    setCloudStatus('☁️ Подключение к облаку…','warn');
-    const ok=await cloudLoad();
-    if(!ok)setCloudStatus('☁️ Локальный режим · облако недоступно','warn');
+  setCloudStatus('☁️ Загрузка облачных данных…','warn');
+  const ok=await cloudLoad();
+  if(!ok){
+    // Only fall back to the local cache when Supabase is unavailable.
+    setCloudStatus('☁️ Локальный режим · облако недоступно','warn');
+    page('dashboard');
   }
 },50);
 </script>
