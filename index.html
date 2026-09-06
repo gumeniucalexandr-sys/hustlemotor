@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>HUSTLE MOTORS CRM v7.16</title>
+<title>HUSTLE MOTORS CRM v7.17</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f5f6f8;color:#17202a}
 .app{display:flex;min-height:100vh}.side{width:230px;background:#111827;color:#fff;padding:22px 14px;position:fixed;inset:0 auto 0 0}
@@ -127,6 +127,8 @@ db.cars=Array.isArray(db.cars)?db.cars:[];
 db.clients=Array.isArray(db.clients)?db.clients:[];
 db.deals=Array.isArray(db.deals)?db.deals:[];
 db.expenses=Array.isArray(db.expenses)?db.expenses:[];
+// Old versions stored photo data URLs in localStorage; discard those heavy blobs from the cache.
+db.cars.forEach(c=>{if(Array.isArray(c.photos))c.photos=c.photos.filter(p=>typeof p==='string'&&!p.startsWith('data:'));});
 db.cars.forEach(c=>{
   if(!Array.isArray(c.photos))c.photos=[];
   if(!Array.isArray(c.listings))c.listings=[];
@@ -134,7 +136,7 @@ db.cars.forEach(c=>{
 });
 let photos=[]; let editId=null;
 
-// HUSTLE MOTORS v7.15 — Supabase is the source of truth; localStorage is only a temporary/offline cache.
+// HUSTLE MOTORS v7.17 — Supabase is the source of truth; localStorage stores only a lightweight cache (never raw photo data).
 const SUPABASE_URL='https://jpzoghmpfdhyzisjtpza.supabase.co';
 const SUPABASE_KEY='sb_publishable_70e1x7fKJowSMUpp_vhcvQ_dHW8yvAj';
 let hmCloudClient=null, cloudReady=false, cloudBusy=false;
@@ -186,7 +188,7 @@ async function cloudLoad(){
   // client_cars is loaded separately because it depends on the generated local ids above.
   const cc=await hmCloudClient.from('client_cars').select('*'); if(cc.error)throw cc.error;
   (cc.data||[]).forEach(r=>{const cl=db.clients.find(x=>x.cloudId===r.client_id),c=db.cars.find(x=>x.cloudId===r.car_id);if(cl&&c)cl.carIds.push(c.id);});
-  try{localStorage.setItem(KEY,JSON.stringify(db));}catch(e){}
+  save();
   setCloudStatus(`☁️ Облако · ${db.cars.length} авто`,'ok'); page('dashboard'); return true;
  }catch(e){cloudErr('cloudLoad',e);return false;}
 }
@@ -200,8 +202,8 @@ async function cloudUpsertCar(c){
  if(!cloudReady)return;
  const payload={brand:c.brand,model:c.model,year:c.year||null,mileage:c.mileage||null,vin:c.vin||null,status:c.status,purchase_date:c.purchaseDate||null,ready_date:c.ready||null,purchase_price:c.purchase||0,sale_price:c.sale||0,note:c.note||null};
  let row;
- if(c.cloudId){let r=await hmCloudClient.from('cars').update(payload).eq('id',c.cloudId).select().maybeSingle();if(r.error)throw Object.assign(r.error,{_crmStep:'cars UPDATE'});if(r.data){row=r.data;}else{const ins=await hmCloudClient.from('cars').insert(payload).select().single();if(ins.error)throw Object.assign(ins.error,{_crmStep:'cars RE-INSERT'});row=ins.data;c.cloudId=row.id;try{localStorage.setItem(KEY,JSON.stringify(db));}catch(_){} }}
- else {const r=await hmCloudClient.from('cars').insert(payload).select().single();if(r.error)throw Object.assign(r.error,{_crmStep:'cars INSERT'});row=r.data;c.cloudId=row.id;try{localStorage.setItem(KEY,JSON.stringify(db));}catch(_){} }
+ if(c.cloudId){let r=await hmCloudClient.from('cars').update(payload).eq('id',c.cloudId).select().maybeSingle();if(r.error)throw Object.assign(r.error,{_crmStep:'cars UPDATE'});if(r.data){row=r.data;}else{const ins=await hmCloudClient.from('cars').insert(payload).select().single();if(ins.error)throw Object.assign(ins.error,{_crmStep:'cars RE-INSERT'});row=ins.data;c.cloudId=row.id;save(); }}
+ else {const r=await hmCloudClient.from('cars').insert(payload).select().single();if(r.error)throw Object.assign(r.error,{_crmStep:'cars INSERT'});row=r.data;c.cloudId=row.id;save(); }
  // Replace listings. Check every request so sync can identify the exact failing table.
  {const r=await hmCloudClient.from('car_listings').delete().eq('car_id',c.cloudId);if(r.error)throw Object.assign(r.error,{_crmStep:'car_listings DELETE'});}
  if(c.listings?.length){const r=await hmCloudClient.from('car_listings').insert(c.listings.map(x=>({car_id:c.cloudId,platform:x.site,price:x.price||null,url:x.url||null})));if(r.error)throw Object.assign(r.error,{_crmStep:'car_listings INSERT'});}
@@ -221,6 +223,9 @@ async function cloudUpsertCar(c){
  try{photoRows.push(...await Promise.all(photoJobs));}
  catch(e){throw e;}
  // Remove DB rows that are no longer present, then upsert the current ordered set.
+ // Replace newly uploaded data URLs in memory with lightweight public URLs.
+ c.photos=photoRows.map(x=>`${SUPABASE_URL}/storage/v1/object/public/car-photos/${x.storage_path}`);
+ save();
  const wanted=new Set(photoRows.map(x=>x.storage_path));
  const stale=(existing.data||[]).filter(x=>!wanted.has(x.storage_path)).map(x=>x.id);
  if(stale.length){const r=await hmCloudClient.from('car_photos').delete().in('id',stale);if(r.error)throw Object.assign(r.error,{_crmStep:'car_photos DELETE'});}
@@ -284,10 +289,10 @@ async function cloudSync(){
  cloudBusy=true;setCloudStatus('☁️ Синхронизация…','warn');
  let step='';
  try{
-  for(const c of db.cars){step=`Авто ${c.brand||''} ${c.model||''} → cars`;try{await cloudUpsertCar(c);try{localStorage.setItem(KEY,JSON.stringify(db));}catch(_){} }catch(e){throw Object.assign(e,{_crmStep:e._crmStep||step});}}
+  for(const c of db.cars){step=`Авто ${c.brand||''} ${c.model||''} → cars`;try{await cloudUpsertCar(c);save(); }catch(e){throw Object.assign(e,{_crmStep:e._crmStep||step});}}
   for(const e of db.expenses){const c=db.cars.find(x=>x.id==e.carId);if(!c?.cloudId)continue;step='car_expenses '+(e.cloudId?'UPDATE':'INSERT');const payload={car_id:c.cloudId,category:e.category,amount:e.amount||0,expense_date:e.date||null,note:e.note||null}; if(e.cloudId){const r=await hmCloudClient.from('car_expenses').update(payload).eq('id',e.cloudId);if(r.error)throw Object.assign(r.error,{_crmStep:step});}else{const r=await hmCloudClient.from('car_expenses').insert(payload).select().single();if(r.error)throw Object.assign(r.error,{_crmStep:step});e.cloudId=r.data.id;}}
   for(const cl of db.clients){step=`clients ${cl.name||''}`;try{await cloudUpsertClient(cl);}catch(e){throw Object.assign(e,{_crmStep:e._crmStep||step});}}
-  try{localStorage.setItem(KEY,JSON.stringify(db));}catch(e){}
+  save();
   const check=await cloudPing();
   if(check)setCloudStatus('☁️ Синхронизировано · облако обновлено','ok');
  }catch(e){
@@ -299,9 +304,17 @@ async function cloudSync(){
 }
 
 
+function cacheSnapshot(){
+  return {
+    cars: db.cars.map(c=>({...c, photos:(c.photos||[]).filter(p=>typeof p==='string' && !p.startsWith('data:')).slice(0,80)})),
+    clients: db.clients,
+    deals: db.deals,
+    expenses: db.expenses
+  };
+}
 const save=()=>{
   try{
-    localStorage.setItem(KEY,JSON.stringify(db));
+    localStorage.setItem(KEY,JSON.stringify(cacheSnapshot()));
     return true;
   }catch(e){
     console.error('Storage quota:',e);
@@ -355,7 +368,7 @@ function cars(){
  app.innerHTML=`<div class="top"><h1>Автомобили</h1><button class="btn" onclick="openCar()">+ Добавить авто</button></div>
  <div class="toolbar">
   <input class="input" id="search" placeholder="Поиск: BMW, VIN, модель..." oninput="renderCars()">
-  <select id="filter" onchange="renderCars()"><option>Все</option><option>В продаже</option><option>Резерв</option><option>Продана</option><option>Не готова</option></select>
+  <select id="filter" onchange="renderCars()"><option value="В наличии">В наличии</option><option value="Продана">Проданные</option><option value="Все">Все</option><option value="В продаже">В продаже</option><option value="Резерв">Резерв</option><option value="Не готова">Не готова</option></select>
   <select id="sortCars" class="sortSelect" onchange="renderCars()">
    <option value="new">Сначала новые</option><option value="age">Дольше всего стоит</option>
    <option value="profit">По прибыли</option><option value="price">По цене</option><option value="year">По году</option>
@@ -367,7 +380,7 @@ function renderCars(){
  const q=(document.getElementById('search')?.value||'').toLowerCase();
  const f=document.getElementById('filter')?.value||'Все';
  const s=document.getElementById('sortCars')?.value||'new';
- let arr=db.cars.filter(c=>(f==='Все'||c.status===f)&&[c.brand,c.model,c.vin].join(' ').toLowerCase().includes(q));
+ let arr=db.cars.filter(c=>((f==='Все')||(f==='В наличии'&&c.status!=='Продана')||c.status===f)&&[c.brand,c.model,c.vin].join(' ').toLowerCase().includes(q));
  if(s==='age')arr.sort((a,b)=>days(b)-days(a));
  if(s==='profit')arr.sort((a,b)=>((+b.sale||0)-cost(b))-((+a.sale||0)-cost(a)));
  if(s==='price')arr.sort((a,b)=>(+b.sale||0)-(+a.sale||0));
@@ -541,20 +554,14 @@ async function saveCar(){
    const i=db.cars.findIndex(x=>x.id===c.id);
    if(i>=0)db.cars[i]=c;else db.cars.push(c);
    if(!save()){
-     // If the browser quota is reached, preserve the car without photos.
-     const backup=[...c.photos]; c.photos=[];
-     if(i>=0)db.cars[i]=c;
-     if(!save()){
-       if(i>=0)db.cars[i]=old; else db.cars.pop();
-       throw new Error('QUOTA');
-     }
-     alert('Автомобиль сохранён, но фотографии не поместились в память браузера. Добавь меньше/меньше фото после очистки старых данных.');
+     if(i>=0)db.cars[i]=old; else db.cars.pop();
+     throw new Error('QUOTA');
    }
    // Close the editor immediately after local save; cloud sync continues in background.
    closeModal();page('cars');
    setCloudStatus('☁️ Сохранение в облако…','warn');
    cloudUpsertCar(c).then(()=>{
-     try{localStorage.setItem(KEY,JSON.stringify(db));}catch(e){}
+     save()
      setCloudStatus('☁️ Авто сохранено в облако','ok');
    }).catch(cloudErrObj=>{
      console.error(cloudErrObj);
@@ -661,7 +668,7 @@ async function markCarSold(id){
  save(); renderDetail(id);
  setCloudStatus(cloudReady?'☁️ Продажа сохраняется…':'☁️ Продано локально',cloudReady?'warn':'ok');
  if(cloudReady){
-   try{await cloudUpsertCar(c);try{localStorage.setItem(KEY,JSON.stringify(db));}catch(_){};setCloudStatus('☁️ Авто отмечено как проданное','ok');}
+   try{await cloudUpsertCar(c);save();setCloudStatus('☁️ Авто отмечено как проданное','ok');}
    catch(e){console.error(e);setCloudStatus('☁️ Продано локально · облако недоступно','warn');}
  }
 }
