@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>HUSTLE MOTORS CRM v7.11</title>
+<title>HUSTLE MOTORS CRM v7.12</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f5f6f8;color:#17202a}
 .app{display:flex;min-height:100vh}.side{width:230px;background:#111827;color:#fff;padding:22px 14px;position:fixed;inset:0 auto 0 0}
@@ -134,7 +134,7 @@ db.cars.forEach(c=>{
 });
 let photos=[]; let editId=null;
 
-// HUSTLE MOTORS v7.11 — Supabase is an optional cloud layer. Local CRM never waits for cloud.
+// HUSTLE MOTORS v7.12 — Supabase is an optional cloud layer. Local CRM never waits for cloud.
 const SUPABASE_URL='https://jpzoghmpfdhyzisjtpza.supabase.co';
 const SUPABASE_KEY='sb_publishable_70e1x7fKJowSMUpp_vhcvQ_dHW8yvAj';
 let hmCloudClient=null, cloudReady=false, cloudBusy=false;
@@ -510,7 +510,8 @@ async function saveCar(){
     brand:brand.value.trim(),model:model.value.trim(),year:+year.value||0,mileage:+mileage.value||0,
     vin:vin.value.trim(),status:status.value,purchaseDate:purchaseDate.value,ready:ready.value,
     purchase:+purchase.value||0,sale:+sale.value||0,note:note.value.trim(),photos:[...photos],
-    listings:readListings(),history:[...(editId?(db.cars.find(x=>x.id===editId)?.history||[]):[])]
+    listings:readListings(),history:[...(editId?(db.cars.find(x=>x.id===editId)?.history||[]):[])],
+    cloudId:(editId?(db.cars.find(x=>x.id===editId)?.cloudId||null):null)
    };
    if(!c.brand||!c.model){alert('Укажи марку и модель');return;}
    const old=editId?db.cars.find(x=>x.id===editId):null;
