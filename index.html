@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>HUSTLE MOTORS CRM v7.10</title>
+<title>HUSTLE MOTORS CRM v7.11</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f5f6f8;color:#17202a}
 .app{display:flex;min-height:100vh}.side{width:230px;background:#111827;color:#fff;padding:22px 14px;position:fixed;inset:0 auto 0 0}
@@ -98,7 +98,7 @@
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body data-build="v7.10">
+<body data-build="v7.11">
 <div class="app">
 <aside class="side"><div class="logo">HUSTLE MOTORS</div><div class="nav">
 <button data-page="dashboard">📊 Dashboard</button><button data-page="cars">🚗 Автомобили</button><button data-page="clients">👤 Клиенты</button><button data-page="deals">🤝 Сделки</button>
@@ -134,7 +134,7 @@ db.cars.forEach(c=>{
 });
 let photos=[]; let editId=null;
 
-// HUSTLE MOTORS v7.9 — Supabase is an optional cloud layer. Local CRM never waits for cloud.
+// HUSTLE MOTORS v7.11 — Supabase is an optional cloud layer. Local CRM never waits for cloud.
 const SUPABASE_URL='https://jpzoghmpfdhyzisjtpza.supabase.co';
 const SUPABASE_KEY='sb_publishable_70e1x7fKJowSMUpp_vhcvQ_dHW8yvAj';
 let hmCloudClient=null, cloudReady=false, cloudBusy=false;
@@ -200,7 +200,7 @@ async function cloudUpsertCar(c){
  if(!cloudReady)return;
  const payload={brand:c.brand,model:c.model,year:c.year||null,mileage:c.mileage||null,vin:c.vin||null,status:c.status,purchase_date:c.purchaseDate||null,ready_date:c.ready||null,purchase_price:c.purchase||0,sale_price:c.sale||0,note:c.note||null};
  let row;
- if(c.cloudId){const r=await hmCloudClient.from('cars').update(payload).eq('id',c.cloudId).select().single();if(r.error)throw Object.assign(r.error,{_crmStep:'cars UPDATE'});row=r.data;}
+ if(c.cloudId){let r=await hmCloudClient.from('cars').update(payload).eq('id',c.cloudId).select().maybeSingle();if(r.error)throw Object.assign(r.error,{_crmStep:'cars UPDATE'});if(r.data){row=r.data;}else{const ins=await hmCloudClient.from('cars').insert(payload).select().single();if(ins.error)throw Object.assign(ins.error,{_crmStep:'cars RE-INSERT'});row=ins.data;c.cloudId=row.id;try{localStorage.setItem(KEY,JSON.stringify(db));}catch(_){} }}
  else {const r=await hmCloudClient.from('cars').insert(payload).select().single();if(r.error)throw Object.assign(r.error,{_crmStep:'cars INSERT'});row=r.data;c.cloudId=row.id;try{localStorage.setItem(KEY,JSON.stringify(db));}catch(_){} }
  // Replace listings. Check every request so sync can identify the exact failing table.
  {const r=await hmCloudClient.from('car_listings').delete().eq('car_id',c.cloudId);if(r.error)throw Object.assign(r.error,{_crmStep:'car_listings DELETE'});}
@@ -304,7 +304,7 @@ function dashboard(){
  const profit=sold.reduce((s,c)=>s+(+c.sale||0)-cost(c),0);
  const avgDays=active.length?Math.round(active.reduce((s,c)=>s+days(c),0)/active.length):0;
  const attention=active.filter(c=>days(c)>60).sort((a,b)=>days(b)-days(a)).slice(0,8);
- app.innerHTML=`<div class="top"><h1>Dashboard</h1><div class="cloudBar"><span id="cloudStatus" class="cloudStatus">☁️ v7.10 · запуск…</span><button class="btn secondary" onclick="cloudSync()">↻ Синхронизировать</button><button class="btn" onclick="openCar()">+ Добавить авто</button></div></div>
+ app.innerHTML=`<div class="top"><h1>Dashboard</h1><div class="cloudBar"><span id="cloudStatus" class="cloudStatus">☁️ v7.11 · запуск…</span><button class="btn secondary" onclick="cloudSync()">↻ Синхронизировать</button><button class="btn" onclick="openCar()">+ Добавить авто</button></div></div>
  <div class="statGrid">
   <div class="kpi"><div class="label">🚗 В наличии</div><div class="value">${active.length}</div></div>
   <div class="kpi"><div class="label">💰 Вложено</div><div class="value">${euro(invested)}</div></div>
